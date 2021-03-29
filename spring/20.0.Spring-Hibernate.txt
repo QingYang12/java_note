@@ -1,0 +1,79 @@
+Spring－Hibernate
+
+1.Spring对Dao异常的支持
+	spring把sqlExcption,等异常都转化成了自己的异常 
+	都以DataAccessException为父类。（继承于RuntimeException，是非检查异常）
+2.Spring对Dao编写的支持
+	1）JDBCTemplate
+	2）HibernateTemplate
+	）JDBCDaoSupport—JDBC（JDBC访问对象的基类）
+	）HibernateDaoSupport-Hibernate（Hibernate数据访问对象的基类）
+	（2）HibernateTemplate主要方法session
+		-save();//（触发缓存更新）保存
+		-update();//（触发缓存更新）更新
+		-delete();//（触发缓存更新）删除
+		-clear();//清除一级缓存中的所有Obj
+		-evict(x);//将x从一级缓存中移除。
+		-close();//关闭Session ，释放缓存空间。
+		转换
+		-通过get、 load 、list 、iterate方法查询到的对象为持久态。
+		-通过save、update方法操作的对象转换为持久态。
+***************************************************************************************
+使用例子1：
+
+	public void add(List<Emp> emps){
+		Session session=hibernateUtil.getSession();
+		Transaction ts=session.beginTransaction();
+		for(Emp e:emps){
+			session.save(e);
+		}
+		ts.commit();
+		HibernateUtil.close();
+
+	}
+****************************************************************************************
+使用例子2：
+public class reVisitDaoImpl extends FoHibernateDaoSupport{
+	FoSQLQuery query = new FoSQLQuery();
+	query.setSQL(SqlSql);
+	//FoHQLQuery query = new FoSQLQuery();
+	//query.setHQL(hqlSql);
+
+	query.setPageNum(pageNum);
+	query.setpageSize(pageSize);
+	FoPage  page=this.execFoPageQuery(query);
+	
+	
+}
+*****************************************************************************************
+使用例子3：
+//String sql="select * from SERVILCE"+"where os_username=?";
+//Session session=HibernateUtil.getSession();
+//SQLQuery query =session.createSQLQuery(sql);
+//query.setString(0,"huangr");
+//List<Object[]> list=query.list();
+//
+//
+//
+*******************************************************************************************
+SessionFactory sf = new Configuration().configure().buildSessionFactory();
+?? Session session = sf.openSession();
+?? Transaction tx = session.beginTransaction();
+????
+??? student st=new student();
+??? st.setId("0001");
+??? st.setUserName("Wang");
+??? st.setpassWord("123");
+??? session.save(st);
+??? tx.commit();
+??? session.close();
+*********************************************************************************************
+Session session=HibernateSessionFactory.getSession();
+transaction tx=session.beginTransaction();
+A a=session.get(A.class,主键);
+//对A重新封装你想要更新的值
+a.setXX();
+session.update(a);
+tx.commit();
+sessio.close()'
+*********************************************************************************************

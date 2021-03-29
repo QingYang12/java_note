@@ -1,0 +1,135 @@
+
+
+Hibernate的所有的操作都是通过Session完成的.
+
+基本步骤如下:
+
+1:通过配置文件得到SessionFactory:
+
+     SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();
+
+2:通过SessionFactory 得到一个Session
+
+     Session session=sessionFactory.openSession();
+
+3:通过session进行插入,删除,修改以及查询.
+
+    插入例子:(1)声明一个事务;(2)Session执行save()操作;(3)事务提交;(4)关闭Session,可选.                   
+             public void insert(Person p){
+   Transaction tran=session.beginTransaction();
+   session.save(p);              
+                tran.commit(); 
+//   session.close();             
+             }     
+    修改例子:(1)声明一个事务;(2)Session执行update()操作;(3)事务提交;(4)关闭Session,可选.
+
+             public void update(Person p){
+
+   Transaction tran=session.beginTransaction();
+
+   session.update(p);
+
+   tran.commit();
+
+//   session.close();
+
+   }
+
+    删除例子(主键删除,推荐使用):(1) 声明删除的SQl语句;(2)创建session的Query对象;(3)设置Query对象的参数;(4)执行Query的executeUpdate()操作;(5)Session事务提交
+
+     public void delete(int id){
+
+   String hql="delete Person as p where p.id=?";
+
+   Query query=session.createQuery(hql);
+
+   query.setInteger(0,id);
+
+   query.executeUpdate();
+
+   session.beginTransaction().commit();
+
+            }
+
+   删除例子(对象删除):(1)声明一个事务;(2)Session执行delete()操作;(3)事务提交;(4)关闭Session,可选.
+    public void delete(Person p){
+
+   Transaction tran = session.beginTransaction();
+
+   session.delete(p);  
+   tran.commit();
+
+   session.close();  
+   }
+
+   查询例子:(跟删除差不多) 查询语句不需要事务提交
+
+(1) 声明删除的SQl语句;(2)创建session的Query对象;(3)设置Query对象的参数;
+
+   public Persion queryById(int id){
+
+   String hql="from Person as p where p.id=?";
+
+   Query query=session.createQuery();
+ 
+   query.setInteger(0,id);
+
+   List rsList=query.list();
+
+   iterator it=rsList.iterator();
+
+   Person person=null;
+
+   while(it.haseNext()){
+
+     person=(Person)it.next();
+
+    }
+
+   return person;
+
+   }
+session.delete()- -
+session.delete(obj)将obj的状态变为transient。两种情况
+1）obj是session的cache里边的cache没有的，比如：
+         session.delete(new Employee(4));
+2）obj存在于session的cache中，比如：
+         Employee employee = (Employee)session.load(Employee.class, new Integer(4));
+         session.delete(employee);
+
+这两种情况都是允许的，hibernate都会发送一条delete语句给数据库。
+
+delete执行之后，如果调用了session.load(), 又可以分为两种情况：
+1）在session.flush()之前，如：
+           tx.beginTransaction();
+　　　 session.delete(new Employee(4));
+           session.load(Employee.class, new Integer(4));//发生在session.flush()之前
+           tx.commit();
+      那么hibernate会抛出ObjectDeletedException:The object with that id was deleted:
+
+2）在session.flush()之后，如：
+           tx.beginTransaction();
+　　　 session.delete(new Employee(4));
+           session.load(Employee.class, new Integer(4));
+           tx.commit();
+
+           tx.beginTransaction();
+           session.load(Employee.class, new Integer(4));//同一个session中，上面的tx.commit()将session flush了一次。
+           tx.commit();
+      那么这个时候hibernate仅仅会抛出ObjectNotFoundException:No row with the give...
+表示找不到该object。如果第二个tx里边采用session.get()也就不会抛出exception了。
+
+delete执行之后，如果调用了session.save(obj):
+           tx.beginTransaction();
+           Employee employee = (Employee)session.load(Employee.class, new Integer(4));
+　　　  session.delete(employee);
+           System.out.println(employee);
+           session.save(employee);
+           System.out.println(employee);
+           tx.commit();
+      这种情况是完全合理的，合法的,
+      delete将employee从persistent的状态变为transient的状态。
+      save将employee从transient状态变为persistent的状态。
+      save一个被delete的obj的时候，在save处hibernate强制执行session.flush()，发送delete语句，然后按照常规的save流程来进行。为什么要这么做，还没有完全想明白。
+
+delete执行之后，如果对obj对象属性的修改，tx.commit()时不会进行dirtyChecking。

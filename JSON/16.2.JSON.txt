@@ -1,0 +1,52 @@
+JSON
+格式：
+	{属性名：属性值，属性名：属性值。。。}           （如果属性名是 字符串  必须用双引号引起来。）
+1.JSON字符串--》 javaScript对象方法：
+	1.JSON字符串--》 javaScript对象
+		使用JOSN的parse()方法；
+		var str ='{"name":"王小贱","age":24}';    //[{"":"" , "":23},{},{}].
+		var obj=JSON.parse(str);
+		alert(obj.name);
+	2.JSON字符串--》 javaScript对象//1与2相似。
+		使用JSON.js文件为字符串增加方法；
+		var str ='{"name":"王小贱","age":24}';
+		var obj=str.parseJSON（）；
+		alert(obj.name);
+2.java对象转换成JSON 对象  （先导入jar包）
+	Employee emp=new Employee("1","王小贱","男");
+	JSONObject obj=JSONObject.fromObject(emp);
+	String jsonStr=obj.toString();
+
+其他
+
+3.$（"#id"）==doucument.getElementById("id");
+	$("").blur() //焦点离开事件
+	$("").val();//组件的值
+	$("").clik();//敲击事件
+	$("").text();//输出值
+	$(" ").data();//获取属性值
+	$("a").addClass("c1"); //   等价于<a>xx</a>     --->     <a  class="c1">xxx</a>
+	$("a").removeClass("c1");// 等价于<a  class="c1">xxx</a>    --->    <a>xx</a>
+	$(this).find("a")//该元素的a标签
+	$("").append();//在后面追加
+	$("").show;//显示所有元素
+	$("").on（）;//追加，
+	$("this").parents();//该对象的父元素
+	$("this").Next();//兄弟元素（下一个）；
+	$("").keydown;//键盘按下；
+	x.keyCode//获取键子ASCLL的值
+	window.location.href="edit.html";//转到xxx页面；
+	result.data;//获取返回的Ajax值
+4.JQ ---Ajax
+
+	$.ajax()-->HMLHttpRequest 例$.ajax({xx:xx;bb:bb})
+
+5.Cookie //js函数：
+	先引入cookie_util.js、JQ
+	addCookie("key",value,time);//需要保存的key，value和保存的时间；存到COOKIE；
+	getCookie("key");//取出Cookie;
+
+6.System.currentTimeMillis();//获取当前系统时间；
+
+onload="js";//加载页面时执行该js.
+引入prototype-1.6.0.3.js;

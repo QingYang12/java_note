@@ -1,0 +1,84 @@
+Ajax
+0.jQ版Ajax(常用)------------------------页面
+	ajax客户端：
+
+	$.ajax({
+	url:请求地址，
+	type:请求类型post|get,
+	data:提交的数据，
+	async:同步或异步处理true|false,
+	dataType:预期服务器返回的结果类型，
+	success:成功回调函数，
+	error：失败回调函数，
+	beforeSend：请求发送前回调函数，
+
+	})
+
+	//例：*（重点）
+	$.ajax({
+		url:“http://localhost:8080/cloud_note/notebook/add.do”，
+		type:post,
+		data:{"noteId":noteId,"noteTitle":noteTitle}，
+		dataType:"json"，
+		success:function xx( data11 ){
+			//data11是服务器返回的数据 ，如果是json字符串,会自动转换成相应的js对象   （相当于reqTXT对象）responseText;
+
+		xxxx;
+		}
+
+	})
+
+	------------------java服务器
+	PrintWriter out=response.getWriter();
+		out.println(" 888888  ");
+
+
+
+
+
+1.<a herf="#" onclik="xxx()"/>//超链接标记
+2.fuction xx(){
+	var x;//可以new;
+	}//JS函数
+3.alert(X);//警告；（常用于查错）
+4.<input type="text" id="xxx"    onblur="xxx()">//文本框    onblur(失去焦点触发)
+
+
+5.request 发送      response接收
+	requset.getParameter("xxxxxx")//接收提取请求中的xxxxx  id的值；（。Java 接收     service下）
+	response.setContentType("text/HTML;charset=utf-8");//设置返回编码方式  plain(文本)
+	request.setCharacterEncoding("utf-8");//设置发送解码方式为utf-8;
+6.PrintWriter out=response.getWriter();
+	out.println("#%@#%");//在.java中写 页面 上的输出显示文字或变量值；
+	out.flush();//即时显示输出流中的文字
+	out.close();//关闭输出流
+
+
+7.XMLHttpRequest（）； //AjaX发送组件；
+8.抛出的常见异常 ServletException,IOException
+9.doucument.getElementById("id")//获取id节点对象
+	doucument.getElementById("id").value;//获取该对象的值
+10. Ajax发送组件调用步骤：(利用js)
+	<script type="text/javascript">//js
+		function xx(){
+		**	var x=new XMLHttpRequest();//获取XMLHttpRequest对象
+		**	x.open("GET","demo1.do",ture);//创建一个Ajax请求(请求方式get post，请求.do，是否异步ture false)      GET请求：       						x.open("GET","demo1.do？name="name,ture);(例get请						求传值name)
+													 							 POST请求：      					x.open("post","demo1.do",ture);     x.setRequestHeader								("content-			type","application/x-www-form-urlencoded")；   x.send（“name=”+name）；
+		x.onreadystatechange=function(){
+					if(x.readyState==4){//4表示处理完成
+						var s=x.responText;//获取服务器返回信息
+											doucument.getElementById("id").innerHTML=s;//把返回									的值显示在id为									            id的页面组件上
+					}
+				};//注册该函数 ，让其请求时自动调用该函数；（send后回调）
+		**	x.send(null);//发送Http请求
+	}
+	</sript>
+11.web.xml     servlet配置
+	<servlet>
+		<servlet-name>www</servlet-name>
+		<servlet-class>包名.w</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>www</servlet-name>
+		<url-pattern>/***.do</url-pattern>
+	</servlet-mapping>

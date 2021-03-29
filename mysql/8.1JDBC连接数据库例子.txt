@@ -1,0 +1,99 @@
+连接数据库
+1.下载连接驱动包 Microsoft SQL Server JDBC Driver 4.0.exe
+2.设置SQL SERVER 2008服务器
+2-1、“开始”→“程序”→“MicrosoftSQLServer2008”→“配置工具”→“SQLServerConfigurationManager”（确认“SQLServerManagementStudio”已关闭）
+
+2-2、“SQLServer2005服务”中停止服务“SQLServer（SQLEXPRESS）”（默认是启动状态）
+
+2-3、“SQLServer2005网络配置”→“MSSQLSERVER的协议”，启动“TCP/IP”（默认是禁用状态），然后双击“TCP/IP”进入属性设置，在“IP地址”里，确认“IPAll”中的“TCP端口”为1433
+
+2-4、“SQLServer2005服务”中启动服务“SQLServer（MSSQLSERVER）”（默认是停止状态）
+
+2-5、关闭“SQLServerConfigurationManager”（此时可以启动“SQLServerManagementStudio”，并用帐户sa、密码liteng登录，SQLServer服务器设置正确的话应该能登录成功）
+
+3、创建测试数据库和表：
+
+启动“SQLServerManagementStudio”，并用帐户sa、密码liteng登录（SQLServer服务器设置正确的话应该能登录成功），创建一个数据库 USERS ，内建一个表USERS。后随便插入数据~~~
+
+Create database USERS
+
+CREATE TABLE USERS
+
+(
+
+UserName varchar(50),
+
+PassWords varchar(50)
+
+)
+
+
+4、创建测试的Java工程和代码
+
+4-1、启动“MyEclipse”→“File”→“New”→“Project”→“JavaProject”，命名为Test
+
+4-2、打开Test的“Properties”→“JavaBuildPath（JAVA构建路径）”→“Libraries”→“AddExternalJARs”，选择下载好的连接驱动包“sqljdbc.jar”或“sqljdbc4.jar”，最好选择一个，然后点击“OK”确定。
+
+注：如出现“此驱动程序不支持 Java Runtime Environment (JRE) 1.6 版。请使用支持 JDBC 4.0 的 sqljdbc4.jar 类库。”则选择正确的jar包。把
+
+4-3、创建一个测试类，编写如下代码：
+
+package it.cast.domain;
+
+import java.sql.*; 
+
+public class Test {
+
+	public static void main(String[] args) {
+
+		Connection con=null;  
+
+		Statement stmt=null;  
+
+		ResultSet rs=null;  
+
+		try{  
+
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");  
+
+		con=DriverManager.getConnection("jdbc:sqlserver://localhost:1433;DatabaseName=USERS","sa","liteng");  
+
+		stmt=con.createStatement();  
+
+		rs=stmt.executeQuery("select UserName,PassWords from USERS");  
+
+		while(rs.next()){  
+
+		String strUserName=rs.getString(1);  
+
+		String strPassWord=rs.getString(2);    
+
+		System.out.println(strUserName+"\t"+strPassWord+"\t");  
+
+		}  
+
+		if(rs!=null)  
+
+		rs.close();  
+
+		if(stmt!=null)  
+
+		stmt.close();  
+
+		if(con!=null)  
+
+		con.close();  
+
+		}catch(Exception e){  
+
+		e.printStackTrace();  
+
+		}finally{  
+
+		System.out.println("GameOver~");  
+
+		}  
+
+	}
+
+}

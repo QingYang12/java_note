@@ -1,0 +1,36 @@
+1.TCP通讯；
+Socket套接字 用于描述ip地址和端口，ServerSocket用于服务端，Socket是建立网络连接时使用的。
+在建立成功时，应用程序的两端都会产生一个Socket实例，操作这个实例，完成所需的会话。
+(Socket s =new Socket("locahost",8808))//第一个参数是本机的ip地址,第二个参数是服务器的ip地址
+方法：	int     getLocalPort();//获取本地使用的端口号
+	InetAddress    getLocalAddress();//获取绑定的ip地址---》a;
+	String   a.getCanonicalHostName();//获取此ip完整的限定名
+	String   a.getHostAddress();//返回ip地址字符串
+
+	int getPort();//获取远端使用的端口号
+	InetAddress.getInetAdress();//获取绑定的远端地址
+
+	InputStream   s.getInputStream();//返回s绑定的输入流；
+	OutputStream  s.getOutputStream();//返回s绑定的输出流；
+	
+	s.close();//关闭释放资源；
+
+2.UDP通讯；方法：
+DatagramPacket:构建接收包：
+		DatagramPacket(byte[] buf,int length)//将数据包中length长度的数据装进buf数组
+		Datagramppacket(byte[] buf,int offset,int length)//将数据包中从offset开始，length长的							//数据装进buf数组。
+		构建发送包：
+		DatagramPacket(byte[] buf,int length,InetAddress clientAddress,int clientPort)
+		//从buf数组中，取出length长的数据创建数据包对象，目标是clientAddress地址，
+		//clientPort端口，通常用来发送数据给客户端。
+
+		DatagramPacket(byte[] buf,int offset，int length,InetAddress clientAddress,int 		clientPort)
+		//从buff数组中，取出offset开始的，length长的数据创建数据包对象，目的是
+		//clientAddress地址，clientPort端口，通常是用来发送数据给客户端。
+
+DatagramSocket:服务器端接收：
+		DatagramSocket(int port)//创建实例，并固定监听port端口的报文。   通常用于服务端。
+		receive(DatagramPacket d)//接收数据报文到d中。receive方法产生"阻塞"。
+	          客户端发送：
+		DatagramSocket()//客户端临时创建。
+		send(DatagramPacket dp)//用于发送报文到目的地的。

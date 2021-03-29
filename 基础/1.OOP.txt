@@ -1,0 +1,127 @@
+OOP
+
+1.数组：
+
+相同元素类型组成的集合
+
+声明方法 例： int[ ] arr=new int[10];//或 int arr[]=new int int[10];
+初始化 例：int arr []={a,b,c};
+
+方法： a.length;//获得数组的长度；
+           System.arraycopy(a,x,a1,x1,y1)//复制数组：a 源数组 x 源数组的起始位置  a1 目标数组 x1 目标数组的起				始位置 y1要复制的元素的个数；
+            Arrays.sort（x）;//数组从小到大排序；
+           Arrays.copyof（a,x）；//复制数组：a 源数组 x 复制元素的个数；（常用于数组扩容 例：					//		a=Arrays.copyof（a,a.length+1）;    ）
+	Arrays.asList(b);//b数组变集合；
+
+2.m(a,b){xx}--->m(a,b){xxx}//重写
+   m(a,b){xx}--->m(c,d){xx}//重载
+   static final；常量//final(不可变)
+   abstract//抽象类修饰
+   interface//接口修饰
+   imlements//实现
+   extends//继承
+
+   public// 本类 同包类 子类 其他类
+   protected//本类 同包类 子类 
+   默认//本类 同包类
+   private//本类
+   
+
+3.instanceof//判断 某对象是否属于某类型	例：  a instanceof bb    (bb是类  a是对象)
+
+
+4.加载图片：
+	BufferedImage s;
+	s=ImageIO.read(getClass().getResource("X"));//其中x为图片的位置；
+
+	例：BufferedImage [] imgs=new  BufferedImage[4];
+		for(int  i=0;i<imgs.length;i++){
+		imgs[i]=ImageIO.read(getClass().getResource("imgs/bomb_"+i+".png"));
+			}
+			
+5.JFrame窗体容器（创窗体）
+	初始化构造函数中可以已设置以下内容
+		this.setSize(320, 480+30);//设置窗体的宽高；
+		this.setTitle("XXXX");//设置标题
+		this.setLocationRelativeTo(null);//设置窗体显示的位置（null是显示在屏幕中央）
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);//设置有关闭键
+		this.setVisible(true);//设置窗体是否可见；
+		this.add(w);//向JFrame中增加对象w，w是一个JPane对象
+		this.setResizable(false);//禁止调整窗口大小；
+		this.addKeyListener(new KeyAdapter(){//键盘监听器//分别重写按下和抬起事件。
+			@Override
+			public void keyPressed(KeyEvent e) {
+				switch(e.getKeyCode()){
+				case KeyEvent.VK_LEFT:
+					w.plane.left=true;
+					break;
+
+				}
+				
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				switch(e.getKeyCode()){
+				case KeyEvent.VK_LEFT:
+					w.plane.left=false;
+					 break;	
+	
+				}
+				
+			}
+			
+		});
+6.JPanel面板容器（可以画图片 文字）
+	repaint();//重新绘制一遍；
+
+	new后需要重写paint方法 
+
+	public void paint(Graphics g) {
+
+		//////绘制对象
+		a.paint(g);//绘制a对象;
+
+
+		/////写字
+		g.setColor(Color.RED);//设置写字笔的颜色
+		g.drawRect(10, 10, 103, 15);//设置写字笔的起始位置；
+		g.fillRect(12, 12, 10, 12);//设置写字笔的写字范围
+
+		Font f=new Font(Font.SANS_SERIF,Font.ITALIC|Font.BOLD,20);//设置字体
+		g.setFont(f);
+
+		g.drawString(S);//写字、s为内容。
+
+
+		/////绘制图片
+		g.drawImage(m, x,y , this);//绘制m图片 起始位置x,y   this指控件本身 一般不用
+		g.drawImage(m, x,y,j,k, this);//绘制m图片 起始位置x,y 宽高j,k;
+	}
+
+
+7.等待键盘命令 输入 Scanner
+	Scanner reader=new Scanner(System.in);
+	reader.nextLine();//等待用户键入文本；
+	//next.Byte(),nextDouble(),nextFloat,nextInt(),nextLine(),nextLong(),nextShot()等等；
+
+8.随机数Random 
+	Random ne =new Random();
+	ne.nextInt(X);//产生一个0--X之间的随机数；
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		

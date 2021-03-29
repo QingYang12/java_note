@@ -1,0 +1,43 @@
+JAVA 概述：
+
+	1.开发运行的过程：
+
+	XXX.java--------  javadoc.exe   (java文档编译器)//编译后得到 XXX.java 文件
+	|
+	|next
+	|
+	XXX.class------- javac.exe  （Java 编译器）///编译后得到XXX.class
+	|
+	|next
+	|
+	运行-------          java.exe (java解释器)//运行class文件
+ 
+	2.JAVA解释器运行过程：（Java。EXE）
+
+	类加载器-------- class Loader 加载类 ，查木马，配内存
+	|
+	|next
+	|
+	字节码校验器----------- ByteCodeVerifier 检查语法是否正确 ，格式内存是溢出。
+	|
+	|next
+	|
+	解释器------------------Interpreter 变成硬件调用的指令 并运行。
+
+	3.Java构成：1.Java语言 ，2.环境和JVM，3.类库（JDK）
+	
+	4.Java程序  组成：由多个类组成（只有一个public ）
+		  命名：源文件与主类名相同    扩展名 XX.java 
+
+	5.java程序分为Application和Applet
+
+		1 ) Application :有main ,在哪个程序里都能用，且一般有多个子类。
+		2）Applet :没有main在HTML或特定容器  只有一个子类。
+
+	6.java的可移植性
+
+		1）与平台无关， java类库中有不同平台的接口。
+		2）java 编译器由java语言实现。运行时由标准C实现 
+
+	7.Doc 下  java  XXX 是运行命令 
+

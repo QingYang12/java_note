@@ -1,0 +1,37 @@
+1.集合Collection父
+	a.add(X);//a集合中插入元素，返回值true或false,
+	a.contains(X);//a集合中是否包含X元素；
+	a.size();//集合中元素的个数, 
+	a.clear();//清空当前集合，
+	a.isEmpty(X);//a集合中是否不包含X元素;
+	a.addAll(b);//将b集合中的元素添加到a中；成功返回true;
+	a.containsAll(b);//判断b集合是否是a的子集；
+	a.sort();//元素排序；
+	a.Comparable();//自定义排序；（用时重写该方法）
+
+	a.hasNext();//判断集合中是否还有元素可以遍历
+	a.next();//返回迭代的下一个元素
+2.泛型<> 用于指明集合中只能包含什么类型的元素；
+3.List 集合  子（线性集合）有序     ArrayList（动态）  和  LinkedList（连）
+	a.get(i);//获取a集合中下标为 i 的元素；
+	a.set(i,X);//把a集合中下标为 i 的元素设置为X,并返回原位置的元素；
+	a.add(i,X)//a集合中i位置插入X元素；
+	a.remove(i,X)//a集合中i位置删除X元素；
+	
+4.Map 集合  子 （键值对 集合）0.75
+	a.put(K key;V value);//a集合中添加元素；
+	a.get(key);//a集合中取元素；
+	a.containKey(Key); //判断a中是否有该key;
+	a.keySet（）;//取出所有的key放入一个Set集合；
+	a.entrySet（）//把所有的元素变成entry对象 然后存入Set集合
+
+              LinkedHashMap（双向循环链表）  HashMap（循环链表）hashCode方法
+set
+5.说明： Iterator 迭代器（集合遍历常用工具）
+	a.hasNext(); 和a.next(); 和强行for都是迭代器
+
+	强for:
+\           for(E e:集合或数组){
+	XXXX;
+	}
+//e是对象  E是对象中元素的类型

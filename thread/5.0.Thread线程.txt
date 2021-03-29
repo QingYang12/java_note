@@ -1,0 +1,78 @@
+1.进程是应用程序 任务 ，线程包含在进程中， 线程是具体的任务，线程只能访问进程内的资源，一个进程中可包含多个线程。
+创建线程： 创建类 继承于Thread ，重写run方法，new 这个类 类.start();
+使用Runnable接口创建线程：使线程与线程要执行的任务分离，减少耦合度
+例：Runnable runnable=new TestRunnable();
+	Thread thread=new Thread(runnable);
+	thread.start();
+
+方法：	
+	Thread.currentThread();//获取运行当前代码片段的线程；返回一个Thread； *****  获取当前线程。
+	//获取线程信息的方法；
+	long getId();//返回该线程的标识符
+	String getName();//返回该线程的名称
+	int  getPriority();//返回线程的优先级
+	Thhread.state getState();//获取线程的状态
+	boolean isAlive();//测试线程是否处于活动状态
+	boolean isDaemon();//测试线程是否为守护线程
+	boolean isInterrupted();//测试线程是否已中断
+	//优先级常量（优先级分为10个等级）
+	Thread.MIN_PRIORITY;//最低
+	Thread.MAX_PRIORITY;//最高
+	Thread.NORM_PRIORITY;//默认优先级
+	//设置线程的优先级
+	a.setPriority(int X );//设置该线程的优先级；x为1--10的数值；
+	//守护线程（最后结束的线程）
+	a.setDaemon(X);//设置为守护线程；  X为ture 或false ；ture 为设置为守护线程；
+	//常用方法
+	a.sleep(X);//阻塞线程X ms
+	a.yield();//是当前线程回到 待调用 状态；
+	a.join();//等待当前线程结束； 
+
+
+	同步锁
+	synchronized//同步锁  关键字   写在需要的方法前
+	例：public void synchronized XXX(){
+		};
+
+	wait/notify//等待锁
+
+2.API线程安全问题：
+	StringBuffer是同步的 synchronized appendd();
+	StringBuilder不是同步的 append();
+	Vector和Hashtable是同步的
+	ArrayList和HashMap不是同步的
+	
+	
+	获取安全线程的方式：
+	Collections.synchronizedList();//获取线程安全的List集合
+	Collections.synchronizedMap();//获取线程安全的Map
+
+3.线程池
+	1.Executors.newCachedThreadPool();//创建一个可根据需要创建新线程的线程池，但是在以前创建					的线程可用时将重用他们
+	2.Executors.newFixedThreadPool();//创建一个可重用固定线程集合的线程池，以共享误解队列的方					式来运行这些线程。
+	3.Executors.newScheduledThreadPool();//创建一个线程池，它可以安排在给定延迟后运行命令或者					定期地执行。
+	4.Executors.newSingleThreaddExecutor();//创建一个使用单个worker线程的Executor,以无界对列的					方式来运行该线程。
+4.BlockingQueue双缓冲队列
+一个对列做储存，一个队列做取出操作。 解决安全问题并提高效率；
+
+5.线程之间的通信:
+线程间的通信其实就是多个线程在操作同一个资源， 但操作的动作不同。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

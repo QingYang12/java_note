@@ -1,0 +1,153 @@
+JQUERY
+
+jQuery是JavaScript框架，是一个轻量级的JS库。
+      onload="js";//加载页面时执行该js.
+1.       常用JQ：
+	$("#untitle").attr("title","赋值");//给某属性赋值；
+               $（"#id"）==document.getElementById("id");
+	$("").get(index);//获取某一个DOM对象；==object[index];
+	obj..length;//获取数组的长度；
+	$("").blur() //焦点离开事件
+	$("").val();//组件的值
+	$("").clik();//敲击事件
+	$("").text();//输出值
+	$(" ").data();//获取属性值
+	$("a").addClass("c1"); //   等价于<a>xx</a>     --->     <a  class="c1">xxx</a>
+	$("a").removeClass("c1");// 等价于<a  class="c1">xxx</a>    --->    <a>xx</a>
+	$(this).find("a")//该元素的a标签
+	$("").append();//在后面追加
+	$("").show;//显示所有元素
+	$("").on（）;//追加，
+	$("this").parents();//该对象的父元素
+	$("this").Next();//兄弟元素（下一个）；
+	//var isCirc = $("select[name=isCirc]").val();
+	//var isUpd=$("input[name=isUpd]").val();
+	$("").keydown;//键盘按下；
+	x.keyCode//获取键子ASCLL的值
+	window.location.href="edit.html";//转到xxx页面；
+	result.data;//获取返回的Ajax值
+	$.ajax({
+		url:“http://localhost:8080/cloud_note/notebook/add.do”，
+		type:post,
+		data:{"noteId":noteId,"noteTitle":noteTitle}，
+		dataType:"json"，
+		success:function xx( data11 ){
+			//data11是服务器返回的数据 ，如果是json字符串,会自动转换成相应的js对象   （reqTXT）
+
+		xxxx;
+		}
+	
+	})
+2.	$("div").load("***.do");
+	$get(url,data,callback,type);
+	$post();2.	$("div").load("***.do");
+	$get(url,data,callback,type);
+	$post();
+3.load()  方法
+	将服务器返回的数据直接加载在页面上，异步加载。  （异步reqTXT  ）
+	$obj.load(url,[data]);     url 请求   data 传参       
+	$(this).next().load('sdsdsd.do','sdsds='+vhgfhg)	（直接加在请求节点的下面）
+4.选择器的种类：基本选择器，层子选择器，过滤选择器，表单选择器，
+	基本选择器：元素选择器：依据标签名定位元素$（“元素名”）；
+		    类选择器：根据class属性定位元素$(“。class属性名”)；
+		    id选择器：根据id属性定位元素$('#id')；
+		    选择器组：定位一组选则器所对应的所有元素$("#id,importent");
+	层次选择器：在selectt1元素下，选择所有满足select2的子孙元素$(" select1 select2");
+		    在selectt1元素下,选择所有满足select2的子元素$(" select1 >select2");
+		    在selectt1元素下,选择所有满足select2的下一个弟弟$(" select1+ select2");
+		    在selectt1元素下,选择所有满足select2的所有的弟弟$(" select1 ~select2");
+	过滤选择器：	:first	第一个元素
+			:last	最后一个元素
+			:not(selector)	把selector排除在外
+			:even	挑选偶数行
+			:odd	挑选奇数行
+			:eq(index)		下标等于index的元素
+			:gt(index)		下标大于index的元素
+			:lt(index)		下标小于index的元素
+			//$("tr:first")
+			
+			:contains()	匹配包含指定文本的元素
+			:empty		匹配不包含指定子元素或文本的空元素
+			//$("p:contains(‘月饼’)")
+
+			:hidden		匹配所有不可见元素
+			:visible		匹配所有可见元素
+			//$("input:hidden")
+
+			[attribute]		匹配具有attribute属性的元素
+			[attribute=value]	匹配属性等于value的元素
+			[attribute!=value]	匹配属性值等于value的元素
+			//$("input[value='你好']")
+
+			:enabled		匹配可用的元素
+			:disabled		匹配不可用的元素
+			:checked		匹配选中的checkbox元素
+			:selected		匹配选中的option
+			//$("input:selected")
+
+			
+	表单选择器：          :text//匹配文本框
+			:password///匹配密码框
+			:radio//单选框
+			:checkbox//复选框
+			:submit//提交按钮
+			:reset//重置按钮
+			:button//普通按钮
+			:file//文件框
+		              ：hiden //隐藏框
+		               //$(":text")
+			
+	
+5.节点：   读写节点：读写节点的html内容：obj.html()/obj.html("<span>123</span>")
+		  读写节点的文本内容：obj.text()/obj("123")；
+		  读写节点的value属性值：obj.val()/obj.val("abc");
+		  读写节点的属性值：obj.attr("属性名")/obj.val(“属性名”，“属性值”)
+	创建DOM节点:  $("节点内容"）//$("<span>你好</span >");
+	
+	插入DOM节点:$("父").append(obj);//加一个节点，加在最后。
+		       $("父").prepend(obj);//加一个节点，加在最前。
+		       $("兄").after(obj)//加一个节点，加在兄弟后
+		       $("兄").before(obj)//加一个节点，加在兄弟前。
+	删除DOM节点:obj..remove()//删除节点
+		      obj.remove(selector)//删除满足条件的节点
+		      obj.empty()//清空节点
+	遍历节点：children()//children(selector)//直接子节点
+		next()/next(selector)//下一个兄弟节点
+		prev()//prev(selector)//上一个兄弟节点
+		siblings()/siblings（selector）//所有兄弟
+		find(selector)//查找满足选则器的所有后代
+		parent（）父节点；
+6.样式操作：addClass(" ")//追加指定样式
+	    removeClass(" ")//移除指定样式
+	    removeClass()  //移除所有样式
+	    toggleClass("")//切换样式
+	    hasClass("")//判断是否有某个样式
+	    css("")//读取CSS的值
+                   css("","")//设置多个样式
+7.事件处理：
+	$obj.bind('click',fn)//简写  $obj..click()则代表出发了click事件。
+	$obj.click(function(e){...})
+8.动画效果：
+	show()/hidde()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

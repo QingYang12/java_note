@@ -1,0 +1,89 @@
+1.交互流程：	
+	服务器端：
+
+	/notebook/add.do
+	--> DispatcherServlet
+	--> HandlerMapping
+	--> AddBookConntroller.execute
+		-->NoteBookService
+		-->NoteBookDao-->cn_notebook(插入)
+	--> 返回NoteResult格式json结果
+
+	客户端：
+
+	$.ajax({
+	url:请求地址，
+	type:请求类型post|get,
+	data:提交的数据，
+	async:同步或异步处理true|false,
+	dataType:预期服务器返回的结果类型，
+	success:成功回调函数，
+	error：失败回调函数，
+	beforeSend：请求发送前回调函数，
+
+	})
+
+	//例：
+	$.ajax({
+		url:“http://localhost:8080/cloud_note/notebook/add.do”，
+		type:post,
+		data:{"noteId":noteId,"noteTitle":noteTitle}，
+		dataType:"json"，
+		success:function xx( data11 ){
+			//data11是服务器返回的数据 ，如果是json字符串,会自动转换成相应的js对象   （reqTXT）
+
+		xxxx;
+		}
+	
+	})
+
+
+
+
+2.Spring-MyBatists整合应用步骤。
+	1）搭建SpringMVC和MyBatis环境。
+		创建一个web工程
+		添加MyBatis环境
+		添加SpringMVC环境
+		添加Spring-MyBatists环境
+	2）用MapperScannerConfigurer方式整合MyBatis的Mapper接口。
+		根据数据表编写实体类
+		编写Mapper映射文件，在XML中添加SQL操作的定义
+		编写Mapper接口，定义SQL操作方法。
+		在Spring配置文件中定义以下Bean
+			》DataSource
+			》SQLSessionFactoryBean
+			》MapperScannerConfigurer
+		测试容器Dao组件。
+	3）编写和配置SpringMvc的主要组件
+		编写Controller和请求处理方法。
+		配置<mvc:annotation-driven/>支持@RequestMapping
+		配置Controller组件
+			》开启组件扫描，将Controller扫描到Spring容器 <context:component-scan base-pase-											package="controller"/>
+			》需要Dao时采用注入的方式
+			》在请求处理方法上使用@RequestMapping指定对应的请求。
+		配置ViewResolver
+
+
+
+
+3.	$("div").load("***.do");
+	$get(url,data,callback,type);
+	$post();
+
+
+4.追加节点
+	$('#id').append('<tr><td></td></tr>');
+	
+   清空子节点
+	$('#id').empty();
+   删除节点
+	$('#id').remove();
+
+5.load()  方法
+	将服务器返回的数据直接加载在页面上，异步加载。  （异步reqTXT  ）
+	$obj.load(url,[data]);     url 请求   data 传参       
+	$(this).next().load('sdsdsd.do','sdsds='+vhgfhg)	（直接加在请求节点的下面）
+
+
+

@@ -1,0 +1,151 @@
+1.web基础
+  H5: <!doctype html>
+  head内：<title> <meta><link><style><script>
+		<meta http-equiv="content-type" content="text/html";charset="utf-8"/>
+  有序列表：<ol>
+		<li>1</li>
+		<li>2</li>
+		<li>3</li>
+	   </ol>
+  无序列表：<ul>
+		<li>1</li>
+		<li>2</li>
+		<li>3</li>
+	   </ul>
+  区域框：<div style="color:red;"></div>	
+  图片：<img src="d:/day/pig.png" width="200"/>	  hetght
+  超链接：<a href="" target="" >XX</a>     target指定打开目标方式 _blank, _self等；
+  锚点：<a name="11">X</a>
+            <a href="#11">XXXX</a>
+  表格：<table border="1">
+		<tr>
+			<td>x</td>
+			<td>xx</td>
+		</tr>
+	</table>    属性 border/width.height/align/cellpadding/cellspacing         tr:align左右/valign  垂直
+			td:align/valign /width.height/colspan/rowspan; 
+  表单：<form></form>//action:表单提交的URL//method:指定表单数据的提交方式//enctype:表单数据进行					编码的方式
+           文本框：<input type="text"/>
+           密码框：<input type="password"/>   value访问者输入的文本//maxlength限制输入的字符//redonly设					置文本只读
+           单选框：<input type="radio"/>
+           复选框：<input type="checkbox">    value :文本 提交时提交他//name用于分组//checked设置选中
+           提交按钮：<input type="submit"/>
+           重置按钮：<input type="reset"/>
+           普通按钮：<input type="button"/>  value：按钮的名字；
+           隐藏域：<input type="hidden"/>
+           文本选择域：<input type="file" />
+           标签：<label for="id">XX</label>    for:设置该标签所关联的控件，关联后点标签等同于点击控件；
+           多行文本域：<textrea>XXX</textarea>  cols设置列数   //rows设置行数//readonly只读
+           下拉选：<select>
+		<option value="1">xxx</option>
+		<option value="2">xxx</option>
+		<option value="3">xxx</option>
+                        </select>
+
+2.CSS选择器 （层叠样式表）
+	连接方式：1单个html元素，2在头元素中，3在外联文件中
+	1。<h1 style="color：blue"></h1>
+	2.<style type="text/css">   h2{  color:red;  }   </style>
+	3.<link rel="styesheet" type="text/css" href="../css/c1.css"/>
+      元素（标签）选择器：以元素名作为选怎器的目标：
+		body{  color:black;}       p{ color:blue; }
+      类选择器：className{ color:red; } <h2 class="className" >XXX</h2>
+      id选择器：#id{ color:red; }     <div id="id" >XXX</div>
+
+      伪类选择器：    link 向未被访问的超链接添加样式
+		visited 向已被访问的超链接添加样式
+		active 向被激活的元素添加样式
+		hover 当鼠标悬停至元素上方时，向该元素添加样式。
+		focus 当元素获取焦点时，向该元素添加样式。
+      派生选择器：p>strong{font-size:30px;} （选择标签中的子标签）
+
+	常用属性、、、
+	border属性：四边设置： border:width值  style值  color值(上 右 下 左)
+		     单边设置： border-left:width值  style值  color值
+			       border-right:width值  style值  color值
+			       border-top:width值  style值  color值
+			       border-bottom:width值  style值  color值
+			例：P{ border:1px solid  #CCC }
+	overflow属性:（内容溢出处理）
+			visible hidden scroll(一直出现滚动条)  auto（当溢出时出现滚动条） 
+	box属性:定义元素的内边距 外边距  元素高宽等 margin(外边距)padding(内边距) /padding-top等等
+	例：#box{width:70PX margin:10px padding:5px}四边     （dashed 虚线）
+	   .d3{padding:20px 30px 20px 30px; margin:20px 30px 20px 30px; border1px dashed red}单边
+	background-color:#ccc; 背景颜色；
+	background-image:url('XXX'); 背景图片；
+	background-repeat:  	repeat:垂直和水平方向重复 repeat-x:仅水平重复
+			               repeat-y:仅垂直重复  no-repeat:仅显示一次
+		例：body{background-image:url('XXX');  background-repeat:repeat;}
+	background-position:图片定位    x% y%    x y  left center right top bottom 
+	background-attachhment:  scroll 随文本滚动 fixed 背景固定
+	font-family:指定字体
+	font-size:指定大小
+	font-weight:normal/bold;//字体加粗或正常
+	color:valuel;文本颜色；
+	text-align:left/rgiht/center;文本排列
+	text-decoration:none/underline;文本修饰//下划线
+	line-height:value;行高
+	text-indent:value;首行文本缩进；
+	表格特有样式：boorser-coollapse属性：合并相邻的边框 （separate不和/collapse 合髕）
+	cursor属性：改变鼠标形状 ： default  pointer  crosshair(十字准星) text wait help
+	//列表样式
+	list-style-type:列表标识 
+	    （无序：none无 disc实心点 cirle空心圆 square实心方块）
+	    （有序：none无 deccimal: 数字 lower-roman:小写罗马数字 upper-roman大写罗马数字）
+	list-style-image:url('XXX');//列表图片；
+	改变显示方式//
+	display: none不显示  block设为块 inline行内 inline-block行内块
+
+
+3.定位：流定位（正常定位） 浮动定位（float:left/right/none）clear:left/right/none ，both清除浮动
+	相对定位：让元素相对原来的位置偏离某些距离（position:relative left:50px top:50px）
+	绝对定位：将元素从当前定位中移除 并定位于页面的固定位置（position:absolute left:50px 								top:50px ）
+	固定定位：将元素从当前定位中移除 并定位于窗体的固定位置（position:fixed left:50px 								top:50px ）
+
+	堆叠顺序：z-index:5;  数越大 离用户越近；
+
+4.常用属性：
+	border属性：四边设置： border:width值  style值  color值(上 右 下 左)
+		     单边设置： border-left:width值  style值  color值
+			       border-right:width值  style值  color值
+			       border-top:width值  style值  color值
+			       border-bottom:width值  style值  color值
+			例：P{ border:1px solid  #CCC }
+	overflow属性:（内容溢出处理）
+			visible hidden scroll(一直出现滚动条)  auto（当溢出时出现滚动条） 
+	box属性:定义元素的内边距 外边距  元素高宽等 margin(外边距)padding(内边距) /padding-top等等
+	例：#box{width:70PX margin:10px padding:5px}四边     （dashed 虚线）
+	   .d3{padding:20px 30px 20px 30px; margin:20px 30px 20px 30px; border1px dashed red}单边
+	background-color:#ccc; 背景颜色；
+	background-image:url('XXX'); 背景图片；
+	background-repeat:  	repeat:垂直和水平方向重复 repeat-x:仅水平重复
+			               repeat-y:仅垂直重复  no-repeat:仅显示一次
+		例：body{background-image:url('XXX');  background-repeat:repeat;}
+	background-position:图片定位    x% y%    x y  left center right top bottom 
+	background-attachhment:  scroll 随文本滚动 fixed 背景固定
+	font-family:指定字体
+	font-size:指定大小
+	font-weight:normal/bold;//字体加粗或正常
+	color:valuel;文本颜色；
+	text-align:left/rgiht/center;文本排列
+	text-decoration:none/underline;文本修饰//下划线
+	line-height:value;行高
+	text-indent:value;首行文本缩进；
+	表格特有样式：boorser-coollapse属性：合并相邻的边框 （separate不和/collapse 合髕）
+	cursor属性：改变鼠标形状 ： default  pointer  crosshair(十字准星) text wait help
+	//列表样式
+	list-style-type:列表标识 
+	    （无序：none无 disc实心点 cirle空心圆 square实心方块）
+	    （有序：none无 deccimal: 数字 lower-roman:小写罗马数字 upper-roman大写罗马数字）
+	list-style-image:url('XXX');//列表图片；
+	改变显示方式//
+	display: none不显示  block设为块 inline行内 inline-block行内块
+
+
+
+
+
+
+
+
+

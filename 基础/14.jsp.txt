@@ -1,0 +1,138 @@
+jsp
+语法
+
+1.注释： <%--........ --%>
+
+
+2.jsp 中的java
+
+	表达式：<%=.........%>(变量)
+
+	小脚本：<%.......%>(成行的java 代码）
+	声明：<%!.......%>  <函数 类声明>
+
+
+3./*设置解码java
+  res.setContentType("text/html;charset=utf-8")
+*/
+
+
+4./*ContentType()=“ text/html”；charset=utf-8解码方案浏览器*/<%@page 
+ContentType()=“ text/html”；charset=utf-8% >
+
+5.jsp指令：<%@指令名 属性=值%>
+
+	常用指令：
+-page-include-tagle 
+
+	page指令：1.倒包：<%@ page import="java.util.***"%>
+
+	 	 2.设置response.setContentType()方法的参数：<%@page 	contentType=" 						image/gif"%>(告诉浏览器怎么读)
+		                 	 3.设置读文件解码规则：<%@page pageEncoding="UTF-8"%>
+
+	include指令：<%@include file ="url"%>(引入jsp等等内容)
+
+
+6.web项目：webRoot文件夹下：建立hello.jsp文件。
+访问：localhost:8088/Jsp01/hello.jsp
+
+
+7.jsp页面代码如下：
+
+	<%@page pageEncoding="UTF-8" %>
+
+	<%--1.先写HTML/CSS/JS --%>
+
+	<!doctype html>
+
+	<HTML>
+
+		<head>
+
+			<meta charset="utf-8"/>
+
+			<title>FirstJSP</title>
+
+		</head>
+
+		<body>
+
+			<ul>
+
+				<%--2.再写java --%>
+
+				<%
+
+				       for(int i=101;i<=120;i++){
+
+					%>
+
+				<li>
+
+				
+<%=i       %>
+ 
+				</li>
+	
+		               <%
+
+				         }
+				
+                                                                         %>
+
+			</ul>
+
+		</body>
+
+	</HTML>
+
+
+
+
+
+
+
+
+
+
+8.获取应用的实际部署名称可以使用如下方法：
+	String request.getContextPath();
+
+9.java变量值赋值给js变量：  var wh=<%=javawh%>
+  js变量值赋值给java变量：无
+
+10.JSP简单实例
+
+<%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>My JSP 'index.jsp' starting page</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<!--
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	-->
+  </head>
+  
+  <body>
+    This is my JSP page. <br>
+  </body>
+</html>
+
+
+
+
+
+
+

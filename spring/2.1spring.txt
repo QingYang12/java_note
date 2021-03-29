@@ -1,0 +1,32 @@
+package coms;
+
+
+public class Test3 {
+
+
+    public static void main(String[] args) {
+        String a=null;
+        String b="hello";
+        System.out.println(a+b);
+
+
+        String x="hello";
+        String y=new String("hello");
+        System.out.println(x==y);
+
+        String x2="hello";
+        String y3="hello";
+        System.out.println(x2==y3);
+
+
+        String str1="hello";
+        String str2="he"+new String("llo");
+        System.out.println(str1==str2);
+    }
+}
+
+///////////////////
+nullhello
+false
+true
+false

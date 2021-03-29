@@ -1,0 +1,48 @@
+dom对象
+
+文档对象模型
+当网页被加载时，浏览器会创建文档对象模型
+nodeName:节点的名称    标签或属性名
+nodeType:节点类型   
+	返回值
+	元素节点：返回 1
+	属性节点：反回 2
+	文本节点：返回 3
+	注释节点：返回 8
+	文档节点：返回 9
+innerText:设置或读取位于对象起始和结束标签内的文本
+innerHTML：设置或获取位于对象起始和结束标签内的HTML
+节点属性
+getAttribute();//根据属性名称获取属性的值
+		var href=a1.getAttribute("href");
+setAttribute();//
+removeAttribute();
+
+		组合例：<a href="Default.aspx" title="this is alink" id="a1">Clink Me</a>
+			var a1=document.getElementById("a1");
+			var href=a1.getAttribute("href");
+			alert(href);
+			alert(a1.innerHTML);
+根据Id属性查询节点：document.getElementsById();
+根据name属性查询节点：document.getElementsByName();
+			-使用节点列表的length属性获取个数
+			-[index]:定位具体的元素
+根据层次查询节点：parentNode:遵循文档的上下层次结构，查找单个父节点
+		childNodes:遵循文档的上下层次结构，查找多个子节点
+
+
+
+例：将HTML标记，属性和CSS样式都对象化
+	<a href="Default.aspx"  id="a1">Click Me</a>
+	<img src="ball.jpg" id="img1"/>
+	
+	var a1=document.getElementById("a1");
+	alert(a1.href);
+	a1.innerHTML="new text";
+	document.getElementById("img1").src="jpg";
+
+元素节点的样式
+style属性
+	-node.style.color
+	-node.style.fontSize
+className属性

@@ -1,0 +1,84 @@
+JS常用
+1.测试：   Prompt();//带输入的alert;
+	alert(' ')//警告框；
+	typeof();//变量类型，返回变量的类型；
+	document.write(' ');//输出，在页面上；
+2.JS  Array对象:1 )创建（1）new Array();
+		   (2)[a,b];//数组直接量
+	        2）方法：       concat();//连接两个数组，并返回结果。
+			join();//把数组变成字符串，分割通过指定的字符。
+			pop();//删除最后一个元素。
+			push();//加入最后一个元素。
+			reverse();//颠倒数组的顺序。
+			shift();//加入头元素。
+			unshift();//删除头元素。
+			slice();//从某个已有数组返回选定的元素。
+			sort();//排序
+			splice();//删除元素，添加新元素。
+			toString();//把数组变成字符串。
+			valueof();//取值。
+
+3.JS  String对象：1 )方法：      valueof();//取值
+			tostring();//返回字符串
+			tolowercase();//小写
+			toUppercase();//大写
+			sub();//截取；
+			substr()//截  个数
+			substring()//截   之间
+			split();//分  字符串数组
+			small();//小号
+			big();//大号
+			bold();//加粗
+			fontcolor();//指定颜色
+			fontsize();//指定字号
+			intalics();//斜体
+			anchor();//设置为锚点
+			lastIndexof();//后检索
+			Indexof();//前检索
+			link();//将串变为链接
+			replace();//替换
+			slice();//返回选定元素
+			concat();//链接
+			chartAt();//选定字符。
+
+4.Object对象
+	创建：1）var a=new object();
+		a.name=***;
+		a.age=****;
+		a.eat=function( ){ };
+	          2）var cat={
+			name:‘mim’,//对象直接量
+			age:3,
+			eat:function(){ }
+			}
+
+5.JS事件
+	onblur:失焦
+	onclick:单击
+	onbdclick:双击
+	onfocus:得焦
+	onkeydown:键盘按下
+	onkeypress:按住
+	onkeyup:松开
+	onload:页面加载完成
+	onmousedown：鼠标按下
+	onmousemove：鼠标移动
+	onmouseout：从元素移开
+	onmouseover移入某元素
+	onmouseup：鼠标松开
+	onreset：重置
+	onsubmit：提交
+	onresize：窗口被调整
+	onselect：文本被选中
+	onerror:加载错误
+	//例：$("").blur() //焦点离开事件
+
+6. 常用     span.innerText  / label.innerText 属性：  文本文字
+	xxx.appendChild(XXXX)    //xxx下增加XXXX节点
+	document.createElement("zz");//new  一个zz类型的节点
+	xx.innerHTML=“ ”;
+	document.forms[0].submit();//用JS提交表单
+
+
+
+			

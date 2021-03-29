@@ -1,0 +1,88 @@
+﻿Spring
+1spring MVC
+	1.到包spring webmvc junit tomcat
+
+	2.添加spring 配置文件app.xml
+
+	3.配置dispatcherservlet（web.xml）
+
+	4.写controller（业务逻辑）
+
+	5.写jsp
+
+	6.在spring配置文件当中,添加handlermapping,viewresolver的配置信息
+
+
+	大概是：app.xml中配置jsp文件名  controller中配置jsp路径
+
+
+
+2.spring续
+
+作用域
+默认情况下，容器对于一个bean的配置，只会创建一个实例。
+
+可以设置scope属性"prototype",
+每getBean一次
+创建一个对象
+
+生命周期相关方法
+init_method属性：制定初始化方法，容器再创建好想型的对象之后会立即调用初始化法。
+destroy_method属性：销毁指定方法。指针对单例。
+
+
+
+3.IOC（控制反转）是什么？
+对象的依赖关系交给容器来管理。
+
+
+4.DI（依赖注入）是什么？
+容器通过调用对象的构造器或者set方法来
+建立对象之间的依赖关系。
+
+
+5.set 方式注入
+有无参的构造器
+有相应的set/get方法
+
+注入基本类型的值
+可以使用value属性或者value元素。
+
+注入集合
+<list>元素
+<set>元素
+<map>元素和<entry>元素
+properties
+将集合当作一个bean来配置
+
+
+注入类自动装配
+constructor与bytype的方式类似，不同之处在于他应用与构造器参数
+bytype如果容器中存在一个与指定属性类型相同的bean, 那么将于该属性自动装配
+byname根据属性名自动装配。
+
+
+6.常用扫描标记：（重点）
+++++++++++++springwebMVC注解应用++++++++++++
+
+   1.requestmappinghandlermapping组件
+   注解形式@RequestMapping("/**.do")    ---请求的改变。
+   2.Controller编写配置取消了实现Controller接口及方法的约定
+   可以程序员自定灵活应用。@Contoller --扫描spring
+
+	/hello.do
+	-->DispatcherServlet
+	-->HandlerMapping    <mvc:annotation-driven/>
+	-->HelloController     <context:component-san base-package="Controller"/> 扫描Controller
+	-->ViewResolver
+	-->hello.jsp
+
+   不需要再改xml文件了
+   =========================================
+   1.Controller如何接受请求参数
+	a.利用HttpServletRequestre    request.permeter
+	b.利用业务方法参数
+	--参数名与请求参数key保持一直--
+	--利用@requestParam(“***key”)注解表标记Controller的方法--
+
+7.常用组件配置：

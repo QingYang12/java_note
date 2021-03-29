@@ -1,0 +1,66 @@
+String字符串和Date日期
+
+1.字符串String
+	String a="XXXXXXXX"//初始化;
+方法： 
+          String.valueof(a);//把a 变成字符串类型；X.valueof(a);/把a 变成X类型; 是用来转变类型的方法  (cz)
+
+          a.getBytes();//把a变成 字节型 数组；byte[];
+
+          a.indexof(x);//检索 是否包含某字符串 （有返回第一次出现的位置 ，没有返回-1）；
+          a.indexof(x，y);//检索 是否包含某字符串   （从y位置开始  有返回第一次出现的位置 ，没有返回-1）；
+          a.lastIndexof(x，y);//检索 是否包含某字符串（ 从y位置开始 有返回最后一次出现的位置没有返回-1）；
+
+          a.substring(x,y);//获取子串   （从x到y;  返回子字符串） 
+          a.substring(x);//获取子串  （从x到末尾；返回子字符串）  
+
+          a.trim();//除去空格；
+          a.equals(b); //判断两对象是否相同
+
+           a.charAt(x);//查阅指定位置x处的字符 （返回该字符）
+
+           a.startsWith(b);//判断a字符串是否以b字符串开头
+           a.endsWith(b);//判断a字符串是否以b字符串结尾
+
+           a.toUpperCase();//其中英文变大写
+           a.toLowerCase();//其中英文变小写
+
+2.StringBuilder字符串变换
+	StringBuilder b=new StringBuilder("str");//初始化
+    方法： b.append(str);//追加字符串
+              b.insert(x,str);//插入字符串 （从x位置）
+              b.delete(x,y);//删除字符串 (从x到y位置)
+              b.repace(x,y,str);//替换字符串 （从x到y位置 替换成str）
+              b.reverse//字符串反转
+
+              b.toString()//变成字符串String 类型；
+
+3.Number包装类
+	它是  Byte    Double    Float    Integer    Long    Short 的父类；
+         n. doubleValue();//以double形式返回指定的数值
+         n.intValue;//以int形式返回指定的数值
+         n.floatValue();//以float形式返回指定的数值
+
+         Integer.parseInt(str);//将字符串String 转换成int类型,返回int值    （cz）
+         Double.parseInt(str);//将字符串String 转换成double类型，返回double值（cz）
+
+4.Date(1970到现在的 毫秒值)
+	a.getTime();//获取毫秒值
+               a.setTime();/设置设置毫秒值
+               a.toString();//该方法被重写 显示的是当前的时间  并不是只是毫秒值编字符串   ( 例：Mon Feb 					15:36:55 CST 2014)
+
+5.SimpleDateFormat 格式化日期               
+	格式化：SimpleDateFormat  s=new SimpleDateFormat (" YYYY-MM-DDD");
+		Date a=new Date();
+		String f=s.format(a);//毫秒格式化方法；
+	变成 毫秒值：String str="2013-12-25"
+		    SimpleDateFormat  s=new SimpleDateFormat (" YYYY-MM-DDD");
+		    Date d=s.parse(str);//固定格式变回毫秒值方法；
+
+6.Calendar时间计算（X时间变量包括：YEAR   MONTH   DATE   DAY_OF_WEEK ）（他也有getTime和			setTime方法）
+	Calendar.getInstance();//获取当前时间
+	a.set(Calendar.X,y);//设置时间  X时间变量设置为y时间
+               a.add(Calendar.X,y);//时间加减 X时间变量上+y时间
+	a.getActualMaximun(Calendar.X)//获取指定日期可能拥有的 最大值；
+
+

@@ -1,0 +1,221 @@
+//总条数  hits total
+
+/*"创建索引"*/
+test0/
+{
+	
+	"mappings": {
+		"properties": {
+			"code": {
+				"type": "keyword",
+				"index": true
+			},
+			"name": {
+				"type": "keyword",
+				"index": false
+			},
+			"anum": {
+				"type": "long",
+				"index": false
+			},
+			"bnum": {
+				"type": "long",
+				"index": false
+			},
+			"cnum": {
+				"type": "long",
+				"index": false
+			}
+		}
+	}
+}
+/*"插入数据"*/  其中的 doc 就是之前提到过的 type，在 6.0 之后已经废弃了，全部写成 doc 即可
+test0/_doc
+[
+	{
+	"code":"1",
+	"name":"test1",
+	"anum":1,
+	"bnum":1,
+	"cnum":1
+
+},
+{
+	"code":"2",
+	"name":"test2",
+	"anum":1,
+	"bnum":2,
+	"cnum":3
+
+},
+{
+	"code":"3",
+	"name":"test3",
+	"anum":2,
+	"bnum":2,
+	"cnum":2
+
+},
+{
+	"code":"4",
+	"name":"test1",
+	"anum":2,
+	"bnum":2,
+	"cnum":2
+}
+,
+{
+	"code":"50",
+	"name":"test1",
+	"anum":2,
+	"bnum":2,
+	"cnum":2
+}
+,
+{
+	"code":"100",
+	"name":"test2",
+	"anum":2,
+	"bnum":2,
+	"cnum":2
+}
+]
+/*"基本查询数据"*/
+/test0/_search
+//全部
+{
+	"query":{
+		"match_all":{}
+	}
+	
+}  
+//匹配   match有分词  term没有分词   match模糊 term是精准
+{
+	"query":{
+		"match":{
+			 "name":"test1"
+		}
+	}
+	
+}
+//must (must字段对应的是个列表，也就是说可以有多个并列的查询条件，一个文档满足各个子条件后才最终返回)   //should是有一个满足就返回
+{
+	"query":{
+		"bool":{
+			"must":[
+				{
+					"match":{"name":"test1"}
+				},
+				{
+					"match":{"code":"50"}
+				}
+				
+			]
+				 
+		}
+		
+	}
+	
+}
+/*"聚合查询数据"*/
+//按group_by_vip分组
+{
+	"query": {
+		"bool": {
+		
+				"must": []
+				}
+			},
+	"aggs": {
+		"group_by_name": {
+			"terms": {
+				 "field": "name"
+		},
+		"aggs": {
+			"avganum_data": {
+				"avg": {
+					"field": "anum"
+				}
+			}
+		}
+	  }
+   }
+}
+//按时间范围分组
+{
+  "size": 0, 
+  "query": {
+    "match_all": {}
+  },
+  "aggs": {
+    "anum_group": {
+      "range": {
+        "field": "anum",
+        "ranges": [
+          {
+            "from": 0,
+            "to": 20
+          },
+          {
+            "from": 20,
+            "to": 70
+          },
+          {
+            "from": 70,
+            "to": 200
+          }
+        ]
+      },
+	  
+	  "aggs":{
+		"anum_group_count":{
+			"avg":{
+				"field": "bnum"
+			}
+		}
+	  }
+	  
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

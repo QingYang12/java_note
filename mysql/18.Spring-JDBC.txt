@@ -1,0 +1,55 @@
+Spring－ＪＤＢＣ
+
+1.Spring对Dao异常的支持
+	spring把sqlExcption,等异常都转化成了自己的异常 
+	都以DataAccessException为父类。（继承于RuntimeException，是非检查异常）
+2.Spring对Dao编写的支持
+	1）JDBCTemplate
+	2）HibernateTemplate
+	）JDBCDaoSupport—JDBC（JDBC访问对象的基类）
+	）HibernateDaoSupport-Hibernate（Hibernate数据访问对象的基类）
+	（1）JDBCTemplate主要方法
+		-queryForInt();
+		-queryForObject()
+		-query()
+		-update()
+		-execute()
+
+		使用列：(注入JdbcDaoSupport    先配置JDBCDaoSupport Bean)
+		JDBCxxDao   implements XXDao{
+		
+		private JdbcTemplate  template;//声明JdbcDaoSupport 
+
+		public void setTemplate(JdbcTemplate template){
+			this.template=template;//注入JdbcDaoSupport 对象
+		}
+		
+		public void add(Emp emp){//主要实现方法。
+			String sql="inert into..."
+			Object[]params={emp.getName(),emp.getSalary...};
+			template.update(sql,params);//执行SQL语句。
+		}
+		
+	}	
+		
+		配置例：
+	<bean id="myDataSource"  class="org.apache.commons.dbcp.BasicDataSource"  destroy-method="close" >
+		<property name="driverClassName" value="..."/>
+		<property name="url" value="..."/>
+		<property name="username" value="..."/>
+		<property name="password" value="..."/>
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="myDataSource"></property>
+	</bean>
+
+	<bean id="jdbcEmpDao" class="org.tarena.dao.JdbcEmpDAO">
+		<property name="template" ref="jdbcTemplate"></property>
+	</bean>
+
+
+
+
+
+

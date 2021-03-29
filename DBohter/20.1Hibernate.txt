@@ -1,0 +1,149 @@
+view plaincopy to clipboardprint?
+public class TeacherTest {
+@Test
+public void update(){
+Session session = HibernateUitl.getSessionFactory().getCurrentSession();
+session.beginTransaction();
+Teacher t = (Teacher) session.get(Teacher.class, 3);
+t.setName(“yangtb2″);
+session.update(t);
+
+session.getTransaction().commit();
+}
+}
+public class TeacherTest {
+@Test
+public void update(){
+Session session = HibernateUitl.getSessionFactory().getCurrentSession();
+session.beginTransaction();
+Teacher t = (Teacher) session.get(Teacher.class, 3);
+t.setName(“yangtb2″);
+session.update(t);
+
+session.getTransaction().commit();
+}
+}
+
+Hibernate 执行的SQL语句：
+
+view plaincopy to clipboardprint?
+Hibernate:
+update
+Teacher
+set
+age=?,
+birthday=?,
+name=?,
+title=?
+where
+id=?
+Hibernate:
+update
+Teacher
+set
+age=?,
+birthday=?,
+name=?,
+title=?
+where
+id=?
+
+我们只更改了Name属性，而Hibernate 的sql语句 把所有字段都更改了一次。
+
+这样要是我们有字段是文本类型，这个类型存储的内容是几千，几万字，这样效率会很低。
+
+那么怎么只更改我们更新的字段呢？
+
+有三中方法：
+
+1.XML中设置property 标签 update = “false” ，如下：我们设置 age 这个属性在更改中不做更改
+
+view plaincopy to clipboardprint?
+<property name=”age” update=”false”></property>
+<property name=”age” update=”false”></property>
+
+在Annotation中 在属性GET方法上加上@Column(updatable=false)
+
+view plaincopy to clipboardprint?
+@Column(updatable=false)
+public int getAge() {
+return age;
+}
+@Column(updatable=false)
+public int getAge() {
+return age;
+}
+
+我们在执行 Update方法会发现，age 属性 不会被更改
+
+view plaincopy to clipboardprint?
+Hibernate:
+update
+Teacher
+set
+birthday=?,
+name=?,
+title=?
+where
+id=?
+Hibernate:
+update
+Teacher
+set
+birthday=?,
+name=?,
+title=?
+where
+id=?
+
+缺点：不灵活····
+
+2.第2种方法··使用XML中的 dynamic-update=”true”
+
+view plaincopy to clipboardprint?
+<class name=”com.sccin.entity.Student” table=”student” dynamic-update=”true”>
+<class name=”com.sccin.entity.Student” table=”student” dynamic-update=”true”>
+
+OK,这样就不需要在字段上设置了。
+
+但这样的方法在Annotation中没有
+
+3.第三种方式：使用HQL语句（灵活，方便）
+
+使用HQL语句修改数据
+
+view plaincopy to clipboardprint?
+public void update(){
+Session session = HibernateUitl.getSessionFactory().getCurrentSession();
+session.beginTransaction();
+Query query = session.createQuery(“update Teacher t set t.name = ‘yangtianb’ where id = 3″);
+query.executeUpdate();
+session.getTransaction().commit();
+}
+public void update(){
+Session session = HibernateUitl.getSessionFactory().getCurrentSession();
+session.beginTransaction();
+Query query = session.createQuery(“update Teacher t set t.name = ‘yangtianb’ where id = 3″);
+query.executeUpdate();
+session.getTransaction().commit();
+}
+
+Hibernate 执行的SQL语句：
+
+view plaincopy to clipboardprint?
+Hibernate:
+update
+Teacher
+set
+name=’yangtianb’
+where
+id=3
+Hibernate:
+update
+Teacher
+set
+name=’yangtianb’
+where
+id=3
+
+这样就只更新了我们更新的字段······

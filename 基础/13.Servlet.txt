@@ -1,0 +1,99 @@
+servlet
+1.servlet是扩展web服务器功能的组件规范。
+  编写一个servlet只需实现servlet接口或者继承HttpServlet的java类。
+2.404：找不到网页
+   405：找不到servlet方法。
+   500：程序运行出错，代码错误。
+   302：重定向。
+3.HTTP协议：
+  W3c(万维网联盟)指定的，应用层协议。用来定义服务器和浏览器之间如何通信。或通信的数据格式。
+4.	请求数据对象：HttpServletRequest 类型的包装对象 request
+	响应数据对象：HttpServletResponse 类型的包装对象 reponse
+5.Request作用：     1）读写Http请求数据（请求行、消息头等）。
+			请求数据包括：请求行、消息头、具体内容。
+			请求行包括：请求方式、请求路径、协议版本。
+		2）设置和获取COOKies
+		3）取得路径信息。
+		4）标识Http会话。
+		5）实现请求转发。
+	方法：      1）getHeaderNames（）//获取消息头
+		2）getHeader（String name）//获取具体的消息头
+		3）getMethod()//获取请求行
+		4）getRequestURI（）//获取路径信息
+		5）Request.getReqDispatcher().forword(res,req);//转发
+6.Response作用：   1）设置客户端输出内容
+		2）设置响应的状态码
+		3）设置浏览器的解码方式
+		4）设置Cookies
+		5）实现重定向。
+	方法：	1）response.sendRedirest()//重定向
+		2）SetCharacterEncoding(String charset)//取  的编码方式
+		3）SetContentType(String type)//读 的编码方式
+			（Content-Type
+				用于定义网络文件的类型和网页的编码，决定浏览器将以什么形式、什么编码读取这个文件
+			   CharacterEncoding
+				作用是设置对客户端请求进行重新编码的编码
+				也就是说一个是设置读，一个是设置取）
+
+7.Servlet常用方法：	1）getParameter(name)//获取提交的值  name--value  1:1
+		2）getParameterValue(name)//同上 1:M
+8.请求的种类：get(搜索资源) post（搜索处理数据） Head（类似于get） put(上传) delete（删除）
+		get:1.在原地址栏输入
+		      2.点击链接
+		      3.表单默认提交方式
+
+		post:1.设置表单的method属性为post
+9.两种请求 处理乱码的方式：
+	     `请求：
+		1.post:页面：<meta http-equiv="Content-type"   content="text/html;charset=utf-8">(相同)
+		         java:request.setcharacterEncoding("utf-8");	（不相同）
+		2.get:页面：<meta http-equiv="Content-type"   content="text/html;charset=utf-8">(相同)
+		        java:  username=new String（username.getBytes("iso-8859-1"),"utf-8"）；
+	      `响应：（相同）
+			reponse.setContentType("text//html;chartset=utf-8");	（不相同）	
+
+10.	request.setCharacterEncoding()是从页面得到数据，数据在往servlet中送的时候字符的编码格式，
+	 response.setCharacterEncoding()是servlet给页面送数据，也就是响应给页面的字符编码格式。
+		这两个都要与页面的字符编码一致。
+11.Servlet生命周期
+	请求-》servlet实例化（new Servlet）-》初始化(调用init()方法)-》就绪（调用Servise）-》销毁(调用destroy());
+	      -》res
+	      -》req
+12.ServletConfig对象：生命周期设置 读取设置对象。（设置init(),destroy()等用的）
+		调用方法：this.getServletConfig();
+
+13.ServletContext对象：设置web应用上下文（给页面绑定数据）
+		调用方法：this.getServletContext();
+		      方法：getServletName（）；//获取servlet配置名；（web.xml文件中的servlet-name）
+			getinitParameter(Strting Name );//获取init值；
+			setAttribute（）//绑定数据（数据整个Servlet共享）
+			getAttribute（）//获取数据
+			removeAttribute()//移除数据
+14.web.xml文件标签
+	<url-pattern>
+	<servlet><init-param><param-name>
+		   	  <param-value>
+	<servlet><servlet-name>
+		<servlet-class>
+
+	<context-param><param-name> (刚发请求就要初始化的数据)
+	                          <param-value>
+
+	
+	web.xml 文件例：
+	<web***..........(头)
+ <servlet>
+  	<servlet-name>helloServlet</servlet-name>
+  	<servlet-class>ws.JS</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>helloServlet</servlet-name>
+  	<url-pattern>/hello</url-pattern>
+  </servlet-mapping>
+	<web-app>
+15.转发与重定向：
+	转发：request.getRequestDispatcher("***.jsp").forward(request,response);
+				   url
+	重定向:response.sendRediect("***.jsp");
+				url
+16.按钮单击跳转网页：<button onclick="window.location.href='xxx.html'">	(用js发送请求)			

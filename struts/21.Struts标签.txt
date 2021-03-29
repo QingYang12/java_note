@@ -1,0 +1,53 @@
+1.Struts2标签常见用法：
+	<s:property value="user.userName"/>//取返回之中的某些值 属性 对象//${user.userName}
+	<s:debug/>//调试用 ，观察返回值（ValueStack）
+	<s:property/>//输出（ValueStack栈顶）
+
+	<s:iterator value="users">//迭代集合，遍历集合。
+		<s:property value="userName"/>
+	</s:iterator>
+	
+	<s:iterator begin="from" end="to" var="k">//按数字迭代，遍历
+		<s:property value="#k"/>
+	</s:iterator>
+	
+	<s:form action="" method="" theme="simple"></s:form>//表单  (theme是主题，生成简约的主题)
+	<s:textfield name="userName"/>//文本框
+	<s:checkbox name="marry"/>//布尔框
+	<s:radio name="sex" list="#{'M':'男','F':'女'}"/>//单选框
+	<s:radio name="favoriteCity" list="cities" listKey="cityCode" listValue="cityName"/>//单选框
+	<s:checkboxlist name="traveCities" list="cities" listKey="cityCode" listValue="cityName"/>//多选框
+	<s:select name="home" list="#{'01':'北京','02':'上海','03':'广州','04':'深圳',}"/>//下拉选
+	<s:select name="home" list="cities" listKey="cityCode" listValue="cityName"/>//下拉选
+
+
+
+2.Struts标签常见用法：
+		1.下拉选：<html:select styleId="classVisit" property="classVisit">
+				<html:option value="0">-----请选择-----</html:option>
+				<html:option value="1">----车险续保---- </html:option>
+				<html:option value="2">----非车险续保---</html:option>
+		 	 </html:select>
+		2.文本框：<html:text property="PolicyNo" styleId="xx"   styleClass="inputblue" style="width:120px" />
+		3.输出文本：<bean:write name="wInfo" property="policyNo" />
+		4.遍历集合：  <logic:present name="PAGE">
+						<logic:notEmpty name="PAGE">
+							<logic:iterate name="PAGE" property="dataList" id="wInfo">
+								xxx
+							</logic:iterate>
+						</logic:notEmpty>
+					</logic:present>
+		5.判断是否存在：<logic:notEmpty name="wInfo" property="reinsureStatus">
+				<logic:match name="wInfo" property="reinsureStatus" value="1">
+						续保成功
+				</logic:match>
+				<logic:match name="wInfo" property="reinsureStatus" value="2">
+						续保中
+				</logic:match>
+				<logic:match name="wInfo" property="reinsureStatus" value="3">
+						续保失败
+				</logic:match>											
+			         </logic:notEmpty>
+3.JS 中的表单提交：//document.forms[0].submit();
+
+	

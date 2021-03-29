@@ -1,0 +1,116 @@
+1.File 文件夹和文件壳（不能操作文件内容）
+	文件路径中的///可用File.separator表示
+	new File（“路径和名 ”）；
+	new File（A，“B ”）；//在A路径下创建B；
+	a. isFile();//判断是否是文件
+	a.length;//返回文件字节量；
+	a.exists//检测文件或路径是否存在；
+	a.createNewFile();//创建一个空文件；(成功返回ture)
+	a.delete();//删除文件或路径；(成功返回ture)也可删除 指定的路径
+	a.isDirectory();//判断a是否是目录；(成功返回ture)
+	a.mkdirs();//使用指定的路径，（先用new File（“路径 ”）指定）
+	a.ListFiles();//获得子目录 数组；（返回一个子目录数组File类型）
+	a.FileFilter();//路径名过滤器 使用前需重写方法；
+
+2.RandomAccessFile 对文件随机访问操作     读写（只能读写int值和 字节 ）
+	new RandomAccessFile(n , X);  n是文件的名字 ，x可以是w 或 r 或 wr  分别代表 写 读 读写；
+	a.write(X);//向n文件中书写X;  x只可以是 int型 byte型；
+	a.write(X,a,b);//书写X中从a开始b个长度的部分；x是byte型数组；
+	a.read();//n文件中读一个字节或一个int值; 返回  int型 或 byte型（此两种类型的数组也可以）；
+	a.close();//释放资源；使用完write和read需要释放资源；
+	a.getFilePointer()//获取当前指针位置；
+	a.seek(X);//把指针移动到X位置；
+	a.skipBytes(X);//丢掉输入的x个字节；
+
+3.InputStream是所有输入流的父类，（只能读int值和 字节 ）	
+	a.read();//n中读一个字节或一个int值; 返回  int型 或 byte型（此两种类型的数组也可以）；
+4.OutputStream是所有输出流的父类 （只能写int值和 字节 ）
+	a.write(X);//向n中书写X;  x只可以是 int型 byte型；
+5.FileOutputStream是文件字节输出流（简称FOS）（只能写int值和 字节 ）
+	new FileOutputStream（E e,X）;//e可以是File类型 也可以是String类型， File类型 表示写入该对象								//String类型 表示写入该									//名称的文件；X可有可无 										//ture表示数据写在
+								//文件的最后 ；
+	a.write(X);//向n文件中书写X;  x只可以是 int型 byte型；
+6.FileInputStream是文件字节输如流（简称FIS）（只能读int值和 字节 ）
+	new FileIntputStream（E e）;//e可以是File类型 也可以是String类型， File类型 表示写入该对象								//String类型 表示写入该									//名称的文件；
+	a.read();//n文件中读一个字节或一个int值; 返回  int型 或 byte型（此两种类型的数组也可以）；
+
+7.BufferedInputStream（输出缓冲流）与 BufferedOutputStream（输入缓冲流）
+//提高读写效率  在一定的字节内先从入缓冲区 到达一定的数量后一起处理；
+	a.flush();//强制写出 或 读出；
+	例：FileIntputStream fis=new FileIntputStream（''X''）;//X是某文件；
+		BufferedInputStream bis=new BufferedInputStream(fis);
+		bis.write("xxxx".getByte());
+		bis.flush();
+		bis.close();
+	FileOutputStream fos=new FileOutputStream（''X''）;
+		BufferedInputStream bos=new BufferedInputStream(fos);
+		bos.write("xxxx".getByte());
+		bos.flush();
+		bos.close();
+
+8.对象流   （对象与字节之间的转换）
+	对象----》》字节序列（使用该方法的类必须实现 Serializable接口）
+	new ObjectOutputStream();//字节序列输出流；
+	a.writeObject(X);//对象 变字节序列；
+	//对象中被transient修饰的属性会被删掉；
+
+	对象《《-----字节序列
+	new ObjectIntputStream();//字节序列输入流；
+	a.writeObject(X);//字节序列变对象 ；
+
+
+****
+****
+****
+
+
+
+9.Reader 和 Writer 是字符（char）输入和输出流的父类
+	a.read();//读int或一个字符char;或char[]字符数组   数组 返回读到的字符量；
+	a.write();//写int或一个字符char;或char[]字符数组；也可直接写出字符串String；
+	a.write(X,a,b);//书写X中从a开始b个长度的部分；x是byte型数组；
+
+10.InputStreamReader（字符输入流）和 OutputStreamWriter （字符输出流）；char;
+	例：FileOutStream fos =new OutputStreamWriter("osw.txt");
+		OutputStreamWriter osw=new OutputStreamWriter(fos,"GBK");
+		osw.write("Mr范");
+		osw.close();
+	      FileInputStream fis=new FileInputStream("demo.txt");
+		InputStreamReader reader=new InputStreamReader(fis,"UTF -8");
+		int c=-1;
+		while((c=reader.readd())!=-1){
+		System.out.print((char)c);
+
+		}
+		reader.close();
+
+
+
+
+***
+11.PrintWriter自动刷新的缓冲字符输出流。
+	a.println("X");//打任何值；换行
+	a.print("X");//打任何值；
+	例：FileOutStream fos =new OutputStreamWriter("osw.txt");
+		OutputStreamWriter osw=new OutputStreamWriter(fos,"GBK");
+		PrintWriter pw=new PrintWriter(osw,ture);//是否自动刷新
+		pw.println(“GGGHG”)；//输出字符串；
+		pw.close();
+	例2：写入文件：
+		PrintWriter pw=new PrintWriter("ds.txt");
+		pw.println("hello!");
+		pw.close();
+
+
+12.BufferedReader缓冲字符输入流。
+	例： FileInputStream fis=new FileInputStream("demo.txt");
+		InputStreamReader reader=new InputStreamReader(fis,"UTF -8");
+		BufferReader br=new BufferReader(reader);
+
+	a.readLine();//连续读一行字符串；
+
+
+
+
+
+

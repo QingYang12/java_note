@@ -1,0 +1,556 @@
+三、动态SQL语句
+
+ 
+
+       有些时候，sql语句where条件中，需要一些安全判断，例如按某一条件查询时如果传入的参数是空，此时查询出的结果很可能是空的，也许我们需要参数为空时，是查出全部的信息。使用Oracle的序列、MySQL的函数生成Id。这时我们可以使用动态sql。
+
+       下文均采用mysql语法和函数（例如字符串链接函数CONCAT）。
+
+ 
+
+3.1 selectKey 标签
+
+       在insert语句中，在Oracle经常使用序列、在MySQL中使用函数来自动生成插入表的主键，而且需要方法能返回这个生成主键。使用myBatis的selectKey标签可以实现这个效果。
+
+       下面例子，使用mysql数据库自定义函数nextval('student')，用来生成一个key，并把他设置到传入的实体类中的studentId属性上。所以在执行完此方法后，边可以通过这个实体类获取生成的key。
+
+
+
+Xml代码  收藏代码
+1.<!-- 插入学生 自动主键-->  
+2.<insert id="createStudentAutoKey" parameterType="liming.student.manager.data.model.StudentEntity" keyProperty="studentId">  
+3.    <selectKey keyProperty="studentId" resultType="String" order="BEFORE">  
+4.        select nextval('student')  
+5.    </selectKey>  
+6.    INSERT INTO STUDENT_TBL(STUDENT_ID,  
+7.                            STUDENT_NAME,  
+8.                            STUDENT_SEX,  
+9.                            STUDENT_BIRTHDAY,  
+10.                            STUDENT_PHOTO,  
+11.                            CLASS_ID,  
+12.                            PLACE_ID)  
+13.    VALUES (#{studentId},  
+14.            #{studentName},  
+15.            #{studentSex},  
+16.            #{studentBirthday},  
+17.            #{studentPhoto, javaType=byte[], jdbcType=BLOB, typeHandler=org.apache.ibatis.type.BlobTypeHandler},  
+18.            #{classId},  
+19.            #{placeId})  
+20.</insert>  
+  
+ 
+
+ 
+
+调用接口方法，和获取自动生成key
+
+
+
+Java代码  收藏代码
+1.StudentEntity entity = new StudentEntity();  
+2.entity.setStudentName("黎明你好");  
+3.entity.setStudentSex(1);  
+4.entity.setStudentBirthday(DateUtil.parse("1985-05-28"));  
+5.entity.setClassId("20000001");  
+6.entity.setPlaceId("70000001");  
+7.this.dynamicSqlMapper.createStudentAutoKey(entity);  
+8.System.out.println("新增学生ID: " + entity.getStudentId());  
+
+ 
+
+ 
+
+selectKey语句属性配置细节：
+
+ 
+
+属性 描述 取值 
+keyProperty selectKey 语句生成结果需要设置的属性。   
+resultType 生成结果类型，MyBatis 允许使用基本的数据类型，包括String 、int类型。   
+order 
+1：BEFORE，会先选择主键，然后设置keyProperty，再执行insert语句；
+2：AFTER，就先运行insert 语句再运行selectKey 语句。 
+BEFORE
+AFTER 
+statementType MyBatis 支持STATEMENT，PREPARED和CALLABLE 的语句形式， 对应Statement ，PreparedStatement 和CallableStatement 响应 
+STATEMENT
+
+PREPARED
+CALLABLE 
+
+ 
+
+3.2 if标签
+
+ 
+
+ if标签可用在许多类型的sql语句中，我们以查询为例。首先看一个很普通的查询：
+
+
+
+Xml代码  收藏代码
+1.<!-- 查询学生list，like姓名 -->  
+2.<select id="getStudentListLikeName" parameterType="StudentEntity" resultMap="studentResultMap">  
+3.    SELECT * from STUDENT_TBL ST   
+4.WHERE ST.STUDENT_NAME LIKE CONCAT(CONCAT('%', #{studentName}),'%')  
+5.</select>  
+
+ 
+
+ 
+
+但是此时如果studentName或studentSex为null，此语句很可能报错或查询结果为空。此时我们使用if动态sql语句先进行判断，如果值为null或等于空字符串，我们就不进行此条件的判断，增加灵活性。
+
+参数为实体类StudentEntity。将实体类中所有的属性均进行判断，如果不为空则执行判断条件。
+
+
+
+Xml代码  收藏代码
+1.<!-- 2 if(判断参数) - 将实体类不为空的属性作为where条件 -->  
+2.<select id="getStudentList_if" resultMap="resultMap_studentEntity" parameterType="liming.student.manager.data.model.StudentEntity">  
+3.    SELECT ST.STUDENT_ID,  
+4.           ST.STUDENT_NAME,  
+5.           ST.STUDENT_SEX,  
+6.           ST.STUDENT_BIRTHDAY,  
+7.           ST.STUDENT_PHOTO,  
+8.           ST.CLASS_ID,  
+9.           ST.PLACE_ID  
+10.      FROM STUDENT_TBL ST   
+11.     WHERE  
+12.    <if test="studentName !=null ">  
+13.        ST.STUDENT_NAME LIKE CONCAT(CONCAT('%', #{studentName, jdbcType=VARCHAR}),'%')  
+14.    </if>  
+15.    <if test="studentSex != null and studentSex != '' ">  
+16.        AND ST.STUDENT_SEX = #{studentSex, jdbcType=INTEGER}  
+17.    </if>  
+18.    <if test="studentBirthday != null ">  
+19.        AND ST.STUDENT_BIRTHDAY = #{studentBirthday, jdbcType=DATE}  
+20.    </if>  
+21.    <if test="classId != null and classId!= '' ">  
+22.        AND ST.CLASS_ID = #{classId, jdbcType=VARCHAR}  
+23.    </if>  
+24.    <if test="classEntity != null and classEntity.classId !=null and classEntity.classId !=' ' ">  
+25.        AND ST.CLASS_ID = #{classEntity.classId, jdbcType=VARCHAR}  
+26.    </if>  
+27.    <if test="placeId != null and placeId != '' ">  
+28.        AND ST.PLACE_ID = #{placeId, jdbcType=VARCHAR}  
+29.    </if>  
+30.    <if test="placeEntity != null and placeEntity.placeId != null and placeEntity.placeId != '' ">  
+31.        AND ST.PLACE_ID = #{placeEntity.placeId, jdbcType=VARCHAR}  
+32.    </if>  
+33.    <if test="studentId != null and studentId != '' ">  
+34.        AND ST.STUDENT_ID = #{studentId, jdbcType=VARCHAR}  
+35.    </if>   
+36.</select>  
+  
+ 
+
+ 
+
+使用时比较灵活， new一个这样的实体类，我们需要限制那个条件，只需要附上相应的值就会where这个条件，相反不去赋值就可以不在where中判断。
+
+
+
+Java代码  收藏代码
+1.public void select_test_2_1() {  
+2.    StudentEntity entity = new StudentEntity();  
+3.    entity.setStudentName("");  
+4.    entity.setStudentSex(1);  
+5.    entity.setStudentBirthday(DateUtil.parse("1985-05-28"));  
+6.    entity.setClassId("20000001");  
+7.    //entity.setPlaceId("70000001");  
+8.    List<StudentEntity> list = this.dynamicSqlMapper.getStudentList_if(entity);  
+9.    for (StudentEntity e : list) {  
+10.        System.out.println(e.toString());  
+11.    }  
+12.}  
+  
+ 
+
+3.3 if + where 的条件判断
+
+       当where中的条件使用的if标签较多时，这样的组合可能会导致错误。我们以在3.1中的查询语句为例子，当Java代码按如下方法调用时：
+
+
+
+Java代码  收藏代码
+1.@Test  
+2.public void select_test_2_1() {  
+3.    StudentEntity entity = new StudentEntity();  
+4.    entity.setStudentName(null);  
+5.    entity.setStudentSex(1);  
+6.    List<StudentEntity> list = this.dynamicSqlMapper.getStudentList_if(entity);  
+7.    for (StudentEntity e : list) {  
+8.        System.out.println(e.toString());  
+9.    }  
+10.}  
+
+ 
+
+ 
+
+如果上面例子，参数studentName为null，将不会进行STUDENT_NAME列的判断，则会直接导“WHERE AND”关键字多余的错误SQL。
+
+ 
+
+这时我们可以使用where动态语句来解决。这个“where”标签会知道如果它包含的标签中有返回值的话，它就插入一个‘where’。此外，如果标签返回的内容是以AND 或OR 开头的，则它会剔除掉。
+
+上面例子修改为：
+
+
+
+Xml代码  收藏代码
+1.<!-- 3 select - where/if(判断参数) - 将实体类不为空的属性作为where条件 -->  
+2.<select id="getStudentList_whereIf" resultMap="resultMap_studentEntity" parameterType="liming.student.manager.data.model.StudentEntity">  
+3.    SELECT ST.STUDENT_ID,  
+4.           ST.STUDENT_NAME,  
+5.           ST.STUDENT_SEX,  
+6.           ST.STUDENT_BIRTHDAY,  
+7.           ST.STUDENT_PHOTO,  
+8.           ST.CLASS_ID,  
+9.           ST.PLACE_ID  
+10.      FROM STUDENT_TBL ST   
+11.    <where>  
+12.        <if test="studentName !=null ">  
+13.            ST.STUDENT_NAME LIKE CONCAT(CONCAT('%', #{studentName, jdbcType=VARCHAR}),'%')  
+14.        </if>  
+15.        <if test="studentSex != null and studentSex != '' ">  
+16.            AND ST.STUDENT_SEX = #{studentSex, jdbcType=INTEGER}  
+17.        </if>  
+18.        <if test="studentBirthday != null ">  
+19.            AND ST.STUDENT_BIRTHDAY = #{studentBirthday, jdbcType=DATE}  
+20.        </if>  
+21.        <if test="classId != null and classId!= '' ">  
+22.            AND ST.CLASS_ID = #{classId, jdbcType=VARCHAR}  
+23.        </if>  
+24.        <if test="classEntity != null and classEntity.classId !=null and classEntity.classId !=' ' ">  
+25.            AND ST.CLASS_ID = #{classEntity.classId, jdbcType=VARCHAR}  
+26.        </if>  
+27.        <if test="placeId != null and placeId != '' ">  
+28.            AND ST.PLACE_ID = #{placeId, jdbcType=VARCHAR}  
+29.        </if>  
+30.        <if test="placeEntity != null and placeEntity.placeId != null and placeEntity.placeId != '' ">  
+31.            AND ST.PLACE_ID = #{placeEntity.placeId, jdbcType=VARCHAR}  
+32.        </if>  
+33.        <if test="studentId != null and studentId != '' ">  
+34.            AND ST.STUDENT_ID = #{studentId, jdbcType=VARCHAR}  
+35.        </if>  
+36.    </where>    
+37.</select>  
+  
+ 
+
+ 
+
+3.4 if + set 的更新语句
+
+当update语句中没有使用if标签时，如果有一个参数为null，都会导致错误。
+
+当在update语句中使用if标签时，如果前面的if没有执行，则或导致逗号多余错误。使用set标签可以将动态的配置SET 关键字，和剔除追加到条件末尾的任何不相关的逗号。
+
+ 
+
+       使用if+set标签修改后，如果某项为null则不进行更新，而是保持数据库原值。如下示例：
+
+
+
+Xml代码  收藏代码
+1.<!-- 4 if/set(判断参数) - 将实体类不为空的属性更新 -->  
+2.<update id="updateStudent_if_set" parameterType="liming.student.manager.data.model.StudentEntity">  
+3.    UPDATE STUDENT_TBL  
+4.    <set>  
+5.        <if test="studentName != null and studentName != '' ">  
+6.            STUDENT_TBL.STUDENT_NAME = #{studentName},  
+7.        </if>  
+8.        <if test="studentSex != null and studentSex != '' ">  
+9.            STUDENT_TBL.STUDENT_SEX = #{studentSex},  
+10.        </if>  
+11.        <if test="studentBirthday != null ">  
+12.            STUDENT_TBL.STUDENT_BIRTHDAY = #{studentBirthday},  
+13.        </if>  
+14.        <if test="studentPhoto != null ">  
+15.            STUDENT_TBL.STUDENT_PHOTO = #{studentPhoto, javaType=byte[], jdbcType=BLOB, typeHandler=org.apache.ibatis.type.BlobTypeHandler},  
+16.        </if>  
+17.        <if test="classId != '' ">  
+18.            STUDENT_TBL.CLASS_ID = #{classId}  
+19.        </if>  
+20.        <if test="placeId != '' ">  
+21.            STUDENT_TBL.PLACE_ID = #{placeId}  
+22.        </if>  
+23.    </set>  
+24.    WHERE STUDENT_TBL.STUDENT_ID = #{studentId};      
+25.</update>  
+
+ 
+
+ 
+
+ 
+
+3.5 if + trim代替where/set标签
+
+       trim是更灵活的去处多余关键字的标签，他可以实践where和set的效果。
+
+ 
+
+3.5.1trim代替where
+
+ 
+
+
+
+Xml代码  收藏代码
+1.<!-- 5.1 if/trim代替where(判断参数) - 将实体类不为空的属性作为where条件 -->  
+2.<select id="getStudentList_if_trim" resultMap="resultMap_studentEntity">  
+3.    SELECT ST.STUDENT_ID,  
+4.           ST.STUDENT_NAME,  
+5.           ST.STUDENT_SEX,  
+6.           ST.STUDENT_BIRTHDAY,  
+7.           ST.STUDENT_PHOTO,  
+8.           ST.CLASS_ID,  
+9.           ST.PLACE_ID  
+10.      FROM STUDENT_TBL ST   
+11.    <trim prefix="WHERE" prefixOverrides="AND|OR">  
+12.        <if test="studentName !=null ">  
+13.            ST.STUDENT_NAME LIKE CONCAT(CONCAT('%', #{studentName, jdbcType=VARCHAR}),'%')  
+14.        </if>  
+15.        <if test="studentSex != null and studentSex != '' ">  
+16.            AND ST.STUDENT_SEX = #{studentSex, jdbcType=INTEGER}  
+17.        </if>  
+18.        <if test="studentBirthday != null ">  
+19.            AND ST.STUDENT_BIRTHDAY = #{studentBirthday, jdbcType=DATE}  
+20.        </if>  
+21.        <if test="classId != null and classId!= '' ">  
+22.            AND ST.CLASS_ID = #{classId, jdbcType=VARCHAR}  
+23.        </if>  
+24.        <if test="classEntity != null and classEntity.classId !=null and classEntity.classId !=' ' ">  
+25.            AND ST.CLASS_ID = #{classEntity.classId, jdbcType=VARCHAR}  
+26.        </if>  
+27.        <if test="placeId != null and placeId != '' ">  
+28.            AND ST.PLACE_ID = #{placeId, jdbcType=VARCHAR}  
+29.        </if>  
+30.        <if test="placeEntity != null and placeEntity.placeId != null and placeEntity.placeId != '' ">  
+31.            AND ST.PLACE_ID = #{placeEntity.placeId, jdbcType=VARCHAR}  
+32.        </if>  
+33.        <if test="studentId != null and studentId != '' ">  
+34.            AND ST.STUDENT_ID = #{studentId, jdbcType=VARCHAR}  
+35.        </if>  
+36.    </trim>     
+37.</select>  
+  
+ 
+
+3.5.2 trim代替set
+
+ 
+
+
+
+Xml代码  收藏代码
+1.<!-- 5.2 if/trim代替set(判断参数) - 将实体类不为空的属性更新 -->  
+2.<update id="updateStudent_if_trim" parameterType="liming.student.manager.data.model.StudentEntity">  
+3.    UPDATE STUDENT_TBL  
+4.    <trim prefix="SET" suffixOverrides=",">  
+5.        <if test="studentName != null and studentName != '' ">  
+6.            STUDENT_TBL.STUDENT_NAME = #{studentName},  
+7.        </if>  
+8.        <if test="studentSex != null and studentSex != '' ">  
+9.            STUDENT_TBL.STUDENT_SEX = #{studentSex},  
+10.        </if>  
+11.        <if test="studentBirthday != null ">  
+12.            STUDENT_TBL.STUDENT_BIRTHDAY = #{studentBirthday},  
+13.        </if>  
+14.        <if test="studentPhoto != null ">  
+15.            STUDENT_TBL.STUDENT_PHOTO = #{studentPhoto, javaType=byte[], jdbcType=BLOB, typeHandler=org.apache.ibatis.type.BlobTypeHandler},  
+16.        </if>  
+17.        <if test="classId != '' ">  
+18.            STUDENT_TBL.CLASS_ID = #{classId},  
+19.        </if>  
+20.        <if test="placeId != '' ">  
+21.            STUDENT_TBL.PLACE_ID = #{placeId}  
+22.        </if>  
+23.    </trim>  
+24.    WHERE STUDENT_TBL.STUDENT_ID = #{studentId}  
+25.</update>  
+  
+ 
+
+ 
+
+3.6 choose (when, otherwise)
+
+ 
+
+    有时候我们并不想应用所有的条件，而只是想从多个选项中选择一个。而使用if标签时，只要test中的表达式为true，就会执行if标签中的条件。MyBatis提供了choose 元素。if标签是与(and)的关系，而choose比傲天是或（or）的关系。
+
+    choose标签是按顺序判断其内部when标签中的test条件出否成立，如果有一个成立，则choose结束。当choose中所有when的条件都不满则时，则执行otherwise中的sql。类似于Java 的switch 语句，choose为switch，when为case，otherwise则为default。
+
+    例如下面例子，同样把所有可以限制的条件都写上，方面使用。choose会从上到下选择一个when标签的test为true的sql执行。安全考虑，我们使用where将choose包起来，放置关键字多于错误。
+
+
+
+Xml代码  收藏代码
+1.<!-- 6 choose(判断参数) - 按顺序将实体类第一个不为空的属性作为where条件 -->  
+2.<select id="getStudentList_choose" resultMap="resultMap_studentEntity" parameterType="liming.student.manager.data.model.StudentEntity">  
+3.    SELECT ST.STUDENT_ID,  
+4.           ST.STUDENT_NAME,  
+5.           ST.STUDENT_SEX,  
+6.           ST.STUDENT_BIRTHDAY,  
+7.           ST.STUDENT_PHOTO,  
+8.           ST.CLASS_ID,  
+9.           ST.PLACE_ID  
+10.      FROM STUDENT_TBL ST   
+11.    <where>  
+12.        <choose>  
+13.            <when test="studentName !=null ">  
+14.                ST.STUDENT_NAME LIKE CONCAT(CONCAT('%', #{studentName, jdbcType=VARCHAR}),'%')  
+15.            </when >  
+16.            <when test="studentSex != null and studentSex != '' ">  
+17.                AND ST.STUDENT_SEX = #{studentSex, jdbcType=INTEGER}  
+18.            </when >  
+19.            <when test="studentBirthday != null ">  
+20.                AND ST.STUDENT_BIRTHDAY = #{studentBirthday, jdbcType=DATE}  
+21.            </when >  
+22.            <when test="classId != null and classId!= '' ">  
+23.                AND ST.CLASS_ID = #{classId, jdbcType=VARCHAR}  
+24.            </when >  
+25.            <when test="classEntity != null and classEntity.classId !=null and classEntity.classId !=' ' ">  
+26.                AND ST.CLASS_ID = #{classEntity.classId, jdbcType=VARCHAR}  
+27.            </when >  
+28.            <when test="placeId != null and placeId != '' ">  
+29.                AND ST.PLACE_ID = #{placeId, jdbcType=VARCHAR}  
+30.            </when >  
+31.            <when test="placeEntity != null and placeEntity.placeId != null and placeEntity.placeId != '' ">  
+32.                AND ST.PLACE_ID = #{placeEntity.placeId, jdbcType=VARCHAR}  
+33.            </when >  
+34.            <when test="studentId != null and studentId != '' ">  
+35.                AND ST.STUDENT_ID = #{studentId, jdbcType=VARCHAR}  
+36.            </when >  
+37.            <otherwise>  
+38.            </otherwise>  
+39.        </choose>  
+40.    </where>    
+41.</select>  
+
+ 
+
+ 
+
+ 
+
+ 
+
+3.7 foreach
+
+对于动态SQL 非常必须的，主是要迭代一个集合，通常是用于IN 条件。List 实例将使用“list”做为键，数组实例以“array” 做为键。
+
+foreach元素是非常强大的，它允许你指定一个集合，声明集合项和索引变量，它们可以用在元素体内。它也允许你指定开放和关闭的字符串，在迭代之间放置分隔符。这个元素是很智能的，它不会偶然地附加多余的分隔符。
+
+注意：你可以传递一个List实例或者数组作为参数对象传给MyBatis。当你这么做的时候，MyBatis会自动将它包装在一个Map中，用名称在作为键。List实例将会以“list”作为键，而数组实例将会以“array”作为键。
+
+这个部分是对关于XML配置文件和XML映射文件的而讨论的。下一部分将详细讨论Java API，所以你可以得到你已经创建的最有效的映射。
+
+ 
+
+ 
+
+3.7.1参数为array示例的写法
+
+ 
+
+接口的方法声明：
+
+
+
+Java代码  收藏代码
+1.public List<StudentEntity> getStudentListByClassIds_foreach_array(String[] classIds);  
+
+ 
+
+动态SQL语句：
+
+
+
+Xml代码  收藏代码
+1.<!— 7.1 foreach(循环array参数) - 作为where中in的条件 -->  
+2.<select id="getStudentListByClassIds_foreach_array" resultMap="resultMap_studentEntity">  
+3.    SELECT ST.STUDENT_ID,  
+4.           ST.STUDENT_NAME,  
+5.           ST.STUDENT_SEX,  
+6.           ST.STUDENT_BIRTHDAY,  
+7.           ST.STUDENT_PHOTO,  
+8.           ST.CLASS_ID,  
+9.           ST.PLACE_ID  
+10.      FROM STUDENT_TBL ST  
+11.      WHERE ST.CLASS_ID IN   
+12.     <foreach collection="array" item="classIds"  open="(" separator="," close=")">  
+13.        #{classIds}  
+14.     </foreach>  
+15.</select>  
+
+ 
+
+测试代码，查询学生中，在20000001、20000002这两个班级的学生：
+
+
+
+Java代码  收藏代码
+1.@Test  
+2.public void test7_foreach() {  
+3.    String[] classIds = { "20000001", "20000002" };  
+4.    List<StudentEntity> list = this.dynamicSqlMapper.getStudentListByClassIds_foreach_array(classIds);  
+5.    for (StudentEntity e : list) {  
+6.        System.out.println(e.toString());  
+7.    }  
+8.<p>}<span style="font-size: 14px; font-weight: bold; white-space: normal;">  </span></p>  
+
+
+
+
+3.7.2参数为list示例的写法
+
+接口的方法声明：
+
+
+
+Java代码  收藏代码
+1.public List<StudentEntity> getStudentListByClassIds_foreach_list(List<String> classIdList);  
+
+ 
+
+动态SQL语句：
+
+
+
+Xml代码  收藏代码
+1.<!-- 7.2 foreach(循环List<String>参数) - 作为where中in的条件 -->  
+2.<select id="getStudentListByClassIds_foreach_list" resultMap="resultMap_studentEntity">  
+3.    SELECT ST.STUDENT_ID,  
+4.           ST.STUDENT_NAME,  
+5.           ST.STUDENT_SEX,  
+6.           ST.STUDENT_BIRTHDAY,  
+7.           ST.STUDENT_PHOTO,  
+8.           ST.CLASS_ID,  
+9.           ST.PLACE_ID  
+10.      FROM STUDENT_TBL ST  
+11.      WHERE ST.CLASS_ID IN   
+12.     <foreach collection="list" item="classIdList"  open="(" separator="," close=")">  
+13.        #{classIdList}  
+14.     </foreach>  
+15.</select>  
+   
+测试代码，查询学生中，在20000001、20000002这两个班级的学生：
+
+
+
+Java代码  收藏代码
+1.@Test  
+2.public void test7_2_foreach() {  
+3.    ArrayList<String> classIdList = new ArrayList<String>();  
+4.    classIdList.add("20000001");  
+5.    classIdList.add("20000002");  
+6.    List<StudentEntity> list = this.dynamicSqlMapper.getStudentListByClassIds_foreach_list(classIdList);  
+7.    for (StudentEntity e : list) {  
+8.        System.out.println(e.toString());  
+9.    }  
+10.} 

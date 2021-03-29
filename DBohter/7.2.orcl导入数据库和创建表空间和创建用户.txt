@@ -1,0 +1,33 @@
+/*
+创建表空间
+*/
+create tablespace cadb
+datafile 'D:\Users\oracle\cadb.DBF'
+size 100M
+autoextend on next 32M
+maxsize unlimited;
+
+/*
+删除表空间
+*/
+drop tablespace 表空间名;
+/*
+创建用户
+*/
+create user cafocus identified by cafocus
+default tablespace cadb;
+grant dba to cafocus;
+grant connect, resource to cafocus;
+
+
+
+\>imp cajjfocus/cajjfocus@orcl fromuser=CNJJFOCUS touser=cajjfocus file=D:\lsx
+serfocus.dmp ignore=y
+
+
+导入命令：
+imp cafocusts/cafocusts@test fromuser=FOCUSTSNEW touser=cafocusts file=E:\长安责任\测试数据库\dump\FOCUSTSNEW_20160831.dmp log=E:\db\focustsnew.log ignore=y
+
+imp cafocus/cafocus@test fromuser=USERFOCUS touser=cafocus file=E:\长安责任\测试数据库\dump\USERFOCUS_20160831.dmp log=E:\db\cafocus.log ignore=y
+
+imp cafocustsnew/cafocustsnew@test fromuser=FOCUSTSNEW touser=cafocustsnew file=E:\长安责任\测试数据库\FOCUSTSNEW_20161031.dmp log=E:\db\focustsnew.log ignore=y
