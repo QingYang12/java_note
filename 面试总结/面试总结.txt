@@ -1,0 +1,64 @@
+1单例： 懒汉式，线程不安全
+		懒汉式，线程安全
+		饿汉式
+		双检锁/双重校验锁
+		https://www.runoob.com/design-pattern/singleton-pattern.html
+2.死锁，活锁
+		https://www.cnblogs.com/sunnyCx/p/8108366.html
+3.事务：https://www.cnblogs.com/yixianyixian/p/8372832.html
+4.斐波那契，杨辉三角，水仙花数，
+5.快速排序，优化版快速排序，选择排序，堆排序，冒泡排序，双重冒泡排序，归并排序，插入排序，希尔排序
+		https://www.cnblogs.com/guoyaohua/p/8600214.html
+6.计算时间复杂度和空间复杂度。
+7.jvm和GC  https://www.jianshu.com/p/76959115d486
+8.jvm调优  https://www.cnblogs.com/diegodu/p/9849611.html
+9.Java基础
+	1.程序，进程，线程，请分别解释这三个概念和区别
+	2.Thread类和Runnable接口的异同
+	3.线程的生命周期
+	4.用户线程和守护线程有什么区别？
+	5.可以直接调用Thread类的run()方法么？
+	6.什么是线程调度器和时间分片？
+	7.在多线程中，什么是上下文切换？
+	8.线程之间是如何通信的？
+	9.为什么线程通信的方法wait(),notify()和notifyAll()被定义在Object类里？
+	10.为什么wait(),notify()和notifyAll()必须在同步方法或者同步块中被调用？
+	11.为什么Thread类的sleep()和yield()方法是静态的？
+	12.如何确保线程安全？
+	13.同步方法和同步块，哪个是更好的选择？
+	14.包装类和基本类型之间转换  什么值域是基本类型什么值域是包装类型  int char long byte float double  short boolean   
+	15.8种基本类型所占字节数
+	16.hashmap和hashtable区别  谁线程安全
+	17.HashMap初始容量是多少？扩容容量是多少？怎么扩容？
+	18.ArrayList LinkedList 的区别和用处
+	19.分别介绍常用的反射方法及用法
+	20.类加载顺序
+	21.Object 类中有多少种方法 分别说明用途
+	22.什么是TCP连接的三次握手
+	23.什么是HTTP  协议 组成  报文结构  header常用参数有哪些 说明作用
+	24.5,7层网络模型
+	25.HashMap和ConcurrentHashMap的区别，HashMap的底层源码
+	26.Interface与abstract类的区别
+	27.AOP是什么
+	28.什么是多态   重载重写区别
+	29.常用设计模式
+	30.是否可以在static环境中访问非static变量？解释原理
+	31.final、finally、finalize之间有何差异？
+	32.同步方法和同步代码块的区别是什么？
+	33.如何通知垃圾回收
+	34.什么是Servlet
+	35. 解释下Servlet的生命周期
+10.spring基础
+	1.spring包中模块组成
+	2.解释什么是IOC 什么是AOP
+	3.spring上下文通常如何使用
+	4.spring生命周期
+	5.详细说明spring中的横切和纵切
+	6.Spring Boot 的核心配置文件有哪几个？它们的区别是什么？
+	7.springcloud五大组件 分别说明用途
+	8.解释RPC
+	9.CAP 是什么 zookeeper eureka各自遵循什么
+11.sql基础
+	https://blog.csdn.net/weixin_43901866/article/details/87992478
+	常考https://www.cnblogs.com/diffrent/p/8854995.html
+
